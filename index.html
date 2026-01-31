@@ -39,7 +39,6 @@
             min-height: -webkit-fill-available;
         }
 
-        /* Animated background */
         .bg-particles {
             position: fixed;
             top: 0;
@@ -65,7 +64,6 @@
             100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
         }
 
-        /* Navigation Panel */
         .nav-panel {
             position: fixed;
             top: 0;
@@ -110,7 +108,6 @@
             font-weight: 300;
         }
 
-        /* Games Grid */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -139,7 +136,6 @@
             background: rgba(255, 255, 255, 0.08);
         }
 
-        /* Card color themes */
         .game-card[data-game="sledzenie"] { border-color: rgba(255, 170, 0, 0.25); }
         .game-card[data-game="sledzenie"]:active { border-color: rgba(255, 170, 0, 0.6); box-shadow: 0 0 30px rgba(255, 170, 0, 0.2); }
 
@@ -181,20 +177,22 @@
             line-height: 1.4;
         }
 
-        /* Game Container */
         .game-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 50;
-            display: none;
-            background: #000;
+            z-index: 200;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            background: #0d0d1a;
         }
 
         .game-container.active {
-            display: block;
+            opacity: 1;
+            visibility: visible;
         }
 
         .game-container iframe {
@@ -203,974 +201,238 @@
             border: none;
         }
 
-        /* Back Button */
         .back-btn {
             position: fixed;
-            top: max(12px, env(safe-area-inset-top));
-            left: max(12px, env(safe-area-inset-left));
-            background: rgba(0, 0, 0, 0.75);
+            top: max(20px, env(safe-area-inset-top));
+            left: 20px;
+            z-index: 300;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: rgba(255, 255, 255, 0.9);
-            padding: 12px 20px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-family: 'Quicksand', sans-serif;
-            cursor: pointer;
-            z-index: 200;
-            display: none;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-        .back-btn:active {
-            transform: scale(0.95);
-            background: rgba(0, 0, 0, 0.9);
         }
 
         .back-btn.visible {
-            display: flex;
+            opacity: 1;
+            visibility: visible;
         }
 
-        .back-btn svg {
-            width: 16px;
-            height: 16px;
+        .back-btn:active {
+            transform: scale(0.9);
+            background: rgba(255, 255, 255, 0.15);
         }
 
-        /* Install prompt */
         .install-prompt {
             position: fixed;
-            bottom: max(20px, env(safe-area-inset-bottom));
+            bottom: -100px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(100, 150, 255, 0.9);
-            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
             padding: 15px 25px;
-            border-radius: 30px;
-            font-size: 14px;
-            z-index: 1000;
-            display: none;
+            display: flex;
             align-items: center;
-            gap: 10px;
-            box-shadow: 0 5px 30px rgba(100, 150, 255, 0.4);
-            cursor: pointer;
+            gap: 15px;
+            z-index: 1000;
+            transition: bottom 0.5s ease;
+            max-width: 90%;
         }
 
         .install-prompt.show {
+            bottom: 30px;
+        }
+
+        .install-prompt-icon {
+            font-size: 32px;
+        }
+
+        .install-prompt-text {
+            flex: 1;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .install-prompt-close {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
             display: flex;
-            animation: slideUp 0.4s ease;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 18px;
         }
 
-        @keyframes slideUp {
-            from { transform: translateX(-50%) translateY(100px); opacity: 0; }
-            to { transform: translateX(-50%) translateY(0); opacity: 1; }
-        }
-
-        .install-prompt .close {
-            margin-left: 10px;
-            opacity: 0.7;
-        }
-
-        /* Footer */
-        .nav-footer {
-            color: rgba(255, 255, 255, 0.2);
-            font-size: 12px;
+        .mic-alert {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 70, 70, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 100, 100, 0.5);
+            border-radius: 20px;
+            padding: 30px;
+            z-index: 400;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            max-width: 80%;
             text-align: center;
-            margin-top: auto;
-            padding: 15px;
+        }
+
+        .mic-alert.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mic-alert-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .mic-alert-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .mic-alert-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .mic-alert-btn {
+            background: white;
+            color: #ff4646;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .mic-alert-btn:active {
+            transform: scale(0.95);
         }
     </style>
 </head>
 <body>
-    <!-- Animated Background -->
     <div class="bg-particles" id="bgParticles"></div>
 
-    <!-- Navigation Panel -->
     <div class="nav-panel" id="navPanel">
         <div class="nav-header">
-            <h1 class="nav-title">🎮 Gry Terapeutyczne</h1>
-            <p class="nav-subtitle">Wybierz aktywność dla dziecka</p>
+            <div class="nav-title">Gry Terapeutyczne</div>
+            <div class="nav-subtitle">Wybierz grę i zacznij zabawę</div>
         </div>
-        
+
         <div class="games-grid">
             <div class="game-card" data-game="sledzenie">
-                <span class="game-icon">✨</span>
-                <div class="game-name">Śledzenie Światełka</div>
-                <div class="game-desc">Śledź poruszającą się kulkę</div>
+                <div class="game-icon">👁️</div>
+                <div class="game-name">Śledzenie wzrokiem</div>
+                <div class="game-desc">Śledź poruszający się obiekt</div>
             </div>
 
             <div class="game-card" data-game="banki">
-                <span class="game-icon">🫧</span>
-                <div class="game-name">Bańki</div>
-                <div class="game-desc">Klikaj bańki mydlane</div>
+                <div class="game-icon">🫧</div>
+                <div class="game-name">Łapanie baniek</div>
+                <div class="game-desc">Kliknij wszystkie bańki</div>
             </div>
 
             <div class="game-card" data-game="swiatla">
-                <span class="game-icon">💡</span>
-                <div class="game-name">Światełka i Cyfry</div>
-                <div class="game-desc">Nauka cyfr 1-10</div>
+                <div class="game-icon">💡</div>
+                <div class="game-name">Świecące światła</div>
+                <div class="game-desc">Śledź migające światła</div>
             </div>
 
             <div class="game-card" data-game="spojrzenie">
-                <span class="game-icon">👀</span>
-                <div class="game-name">Podążaj za Spojrzeniem</div>
-                <div class="game-desc">Ćwiczenie wspólnej uwagi</div>
+                <div class="game-icon">👀</div>
+                <div class="game-name">Kontakt wzrokowy</div>
+                <div class="game-desc">Patrz w oczy postaci</div>
             </div>
 
             <div class="game-card" data-game="spokoj">
-                <span class="game-icon">🧘</span>
-                <div class="game-name">Strefa Spokoju</div>
-                <div class="game-desc">Relaksacyjne dźwięki</div>
+                <div class="game-icon">🌊</div>
+                <div class="game-name">Spokojne fale</div>
+                <div class="game-desc">Relaksujące animacje</div>
             </div>
 
             <div class="game-card" data-game="slowa">
-                <span class="game-icon">🖼️</span>
-                <div class="game-name">Słowa i Obrazki</div>
-                <div class="game-desc">Nauka słów z wymową</div>
+                <div class="game-icon">💬</div>
+                <div class="game-name">Pierwsze słowa</div>
+                <div class="game-desc">Wskaż obrazek</div>
             </div>
 
             <div class="game-card" data-game="dzwiek">
-                <span class="game-icon">🎤</span>
-                <div class="game-name">Magia Dźwięku</div>
-                <div class="game-desc">Reakcja na głos</div>
+                <div class="game-icon">🔊</div>
+                <div class="game-name">Reakcja na dźwięk</div>
+                <div class="game-desc">Wydawaj dźwięki</div>
             </div>
         </div>
-
-        <div class="nav-footer">Dotknij dwukrotnie = pełny ekran</div>
     </div>
 
-    <!-- Back Button -->
-    <button class="back-btn" id="backBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M19 12H5M12 19l-7-7 7-7"/>
-        </svg>
-        Menu
-    </button>
-
-    <!-- Game Container -->
     <div class="game-container" id="gameContainer"></div>
 
-    <!-- Install Prompt -->
+    <div class="back-btn" id="backBtn">←</div>
+
     <div class="install-prompt" id="installPrompt">
-        📲 Zainstaluj aplikację
-        <span class="close" id="closeInstall">✕</span>
+        <div class="install-prompt-icon">📱</div>
+        <div class="install-prompt-text">Zainstaluj aplikację na swoim urządzeniu</div>
+        <button class="install-prompt-close" id="closeInstall">✕</button>
     </div>
 
-    <script>
-        // Register Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('SW registered'))
-                .catch(err => console.log('SW error:', err));
-        }
+    <div class="mic-alert" id="micAlert">
+        <div class="mic-alert-icon">🎤</div>
+        <div class="mic-alert-title">Potrzebny dostęp do mikrofonu</div>
+        <div class="mic-alert-text">Aby gra działała, musisz zezwolić na dostęp do mikrofonu w ustawieniach przeglądarki. Po kliknięciu OK, odśwież stronę i spróbuj ponownie.</div>
+        <button class="mic-alert-btn" id="micAlertBtn">Rozumiem</button>
+    </div>
 
-        // Create background particles
+    <script src="games.js"></script>
+    <script>
+        // Background particles
         const bgParticles = document.getElementById('bgParticles');
-        const colors = ['rgba(100, 150, 255, 0.3)', 'rgba(255, 150, 200, 0.3)', 'rgba(150, 255, 200, 0.3)', 'rgba(255, 200, 100, 0.3)'];
-        
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < 20; i++) {
             const particle = document.createElement('div');
             particle.className = 'bg-particle';
-            particle.style.width = (6 + Math.random() * 16) + 'px';
-            particle.style.height = particle.style.width;
-            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.width = particle.style.height = (Math.random() * 4 + 2) + 'px';
             particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDuration = (18 + Math.random() * 20) + 's';
-            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.background = `hsl(${Math.random() * 60 + 200}, 70%, 60%)`;
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 20) + 's';
             bgParticles.appendChild(particle);
         }
 
-        // Game HTML templates
-        const games = {
-            sledzenie: `<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Śledzenie Światełka</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #050508; min-height: 100vh; overflow: hidden; cursor: none; }
-        .container { position: relative; width: 100vw; height: 100vh; }
-        .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-        .star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; opacity: 0.3; animation: twinkle 3s ease-in-out infinite; }
-        @keyframes twinkle { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.5; } }
-        .light-orb { position: absolute; width: 100px; height: 100px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #ffe066, #ffaa00); box-shadow: 0 0 60px #ffaa00, 0 0 100px #ff8800, 0 0 140px #ff660044; }
-        .light-orb::before { content: ''; position: absolute; top: -20px; left: -20px; right: -20px; bottom: -20px; border-radius: 50%; background: radial-gradient(circle, #ffaa0033 0%, transparent 70%); animation: pulse 2s ease-in-out infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 0.8; } }
-        .trail { position: absolute; width: 40px; height: 40px; border-radius: 50%; pointer-events: none; animation: fadeTrail 1s ease-out forwards; }
-        @keyframes fadeTrail { 0% { opacity: 0.6; transform: scale(1); } 100% { opacity: 0; transform: scale(0.3); } }
-        .controls { position: fixed; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; }
-        .control-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: rgba(255, 255, 255, 0.6); padding: 10px 20px; border-radius: 25px; cursor: pointer; font-size: 14px; transition: all 0.3s; }
-        .control-btn:hover { background: rgba(255, 255, 255, 0.2); color: white; }
-        .control-btn.active { background: rgba(255, 170, 0, 0.3); border-color: rgba(255, 170, 0, 0.5); color: #ffcc00; }
-        .speed-label { color: rgba(255, 255, 255, 0.4); font-size: 12px; text-align: center; font-family: system-ui, sans-serif; }
-        .info { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); color: rgba(255, 255, 255, 0.3); font-size: 14px; font-family: system-ui, sans-serif; }
-    </style>
-</head>
-<body>
-    <div class="container" id="container">
-        <div class="stars" id="stars"></div>
-        <div class="light-orb" id="orb"></div>
-    </div>
-    <div class="controls">
-        <button class="control-btn" id="slowBtn">Wolno</button>
-        <button class="control-btn active" id="mediumBtn">Średnio</button>
-        <button class="control-btn" id="fastBtn">Szybciej</button>
-        <div class="speed-label">Prędkość</div>
-    </div>
-    <div class="info">Podwójne kliknięcie = pełny ekran</div>
-    <script>
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx = null;
-        function initAudio() { if (!audioCtx) { audioCtx = new AudioContext(); } if (audioCtx.state === 'suspended') { audioCtx.resume(); } }
-        const pentatonicNotes = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25];
-        let currentNoteIndex = 0, lastNoteTime = 0;
-        const orbColors = [
-            { main: [255, 224, 102], glow: [255, 170, 0] },
-            { main: [255, 170, 102], glow: [255, 119, 0] },
-            { main: [255, 136, 153], glow: [255, 85, 119] },
-            { main: [221, 153, 255], glow: [170, 85, 255] },
-            { main: [153, 187, 255], glow: [85, 136, 255] },
-            { main: [136, 238, 221], glow: [68, 204, 170] },
-            { main: [153, 255, 170], glow: [85, 221, 119] },
-            { main: [221, 255, 136], glow: [170, 221, 68] }
-        ];
-        let colorPosition = 0;
-        const colorSpeed = 0.00005;
-        function lerpColor(c1, c2, t) { return [Math.round(c1[0]+(c2[0]-c1[0])*t), Math.round(c1[1]+(c2[1]-c1[1])*t), Math.round(c1[2]+(c2[2]-c1[2])*t)]; }
-        function rgbStr(rgb) { return 'rgb('+rgb.join(',')+')'; }
-        function rgbaStr(rgb, a) { return 'rgba('+rgb.join(',')+','+a+')'; }
-        function getCurrentColors() { const i1 = Math.floor(colorPosition) % orbColors.length; const i2 = (i1+1) % orbColors.length; const t = colorPosition - Math.floor(colorPosition); return { main: lerpColor(orbColors[i1].main, orbColors[i2].main, t), glow: lerpColor(orbColors[i1].glow, orbColors[i2].glow, t) }; }
-        function playNote() { const now = Date.now(); if (now - lastNoteTime < 400) return; lastNoteTime = now; initAudio(); const freq = pentatonicNotes[currentNoteIndex]; currentNoteIndex = (currentNoteIndex + 1) % pentatonicNotes.length; const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = 'sine'; osc.frequency.setValueAtTime(freq, audioCtx.currentTime); gain.gain.setValueAtTime(0, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5); const osc2 = audioCtx.createOscillator(); const gain2 = audioCtx.createGain(); osc2.type = 'sine'; osc2.frequency.setValueAtTime(freq * 2, audioCtx.currentTime); gain2.gain.setValueAtTime(0.1, audioCtx.currentTime); gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1); osc.connect(gain); osc2.connect(gain2); gain2.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc2.start(); osc.stop(audioCtx.currentTime + 1.5); osc2.stop(audioCtx.currentTime + 1.5); }
-        const starsContainer = document.getElementById('stars');
-        for (let i = 0; i < 50; i++) { const star = document.createElement('div'); star.className = 'star'; star.style.left = Math.random() * 100 + '%'; star.style.top = Math.random() * 100 + '%'; star.style.animationDelay = Math.random() * 3 + 's'; starsContainer.appendChild(star); }
-        const orb = document.getElementById('orb');
-        const container = document.getElementById('container');
-        let x = window.innerWidth / 2 - 50, y = window.innerHeight / 2 - 50, targetX = x, targetY = y, speed = 0.015;
-        const padding = 100;
-        function setNewTarget() { targetX = padding + Math.random() * (window.innerWidth - padding * 2 - 100); targetY = padding + Math.random() * (window.innerHeight - padding * 2 - 100); }
-        function createTrail() { const colors = getCurrentColors(); const trail = document.createElement('div'); trail.className = 'trail'; trail.style.left = (x + 30) + 'px'; trail.style.top = (y + 30) + 'px'; trail.style.background = 'radial-gradient(circle, ' + rgbaStr(colors.glow, 0.25) + ' 0%, transparent 70%)'; container.appendChild(trail); setTimeout(() => trail.remove(), 1000); }
-        let trailCounter = 0, noteCounter = 0;
-        function updateOrbColor() { colorPosition += colorSpeed * 16; if (colorPosition >= orbColors.length) colorPosition = 0; const colors = getCurrentColors(); orb.style.background = 'radial-gradient(circle at 30% 30%, ' + rgbStr(colors.main) + ', ' + rgbStr(colors.glow) + ')'; orb.style.boxShadow = '0 0 60px ' + rgbStr(colors.glow) + ', 0 0 100px ' + rgbaStr(colors.glow, 0.5) + ', 0 0 140px ' + rgbaStr(colors.glow, 0.25); }
-        function animate() { updateOrbColor(); const dx = targetX - x, dy = targetY - y, dist = Math.sqrt(dx*dx + dy*dy); if (dist < 10) setNewTarget(); x += dx * speed; y += dy * speed; orb.style.left = x + 'px'; orb.style.top = y + 'px'; trailCounter++; if (trailCounter > 5) { createTrail(); trailCounter = 0; } noteCounter++; if (noteCounter > 30 / (speed * 50)) { playNote(); noteCounter = 0; } requestAnimationFrame(animate); }
-        const slowBtn = document.getElementById('slowBtn'), mediumBtn = document.getElementById('mediumBtn'), fastBtn = document.getElementById('fastBtn');
-        function setSpeed(s, btn) { speed = s; [slowBtn, mediumBtn, fastBtn].forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
-        slowBtn.onclick = () => setSpeed(0.008, slowBtn);
-        mediumBtn.onclick = () => setSpeed(0.015, mediumBtn);
-        fastBtn.onclick = () => setSpeed(0.025, fastBtn);
-        setNewTarget(); animate();
-        document.addEventListener('click', initAudio, { once: true });
-        document.addEventListener('dblclick', () => { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); });
-        window.addEventListener('resize', () => { if (x > window.innerWidth - 100) x = window.innerWidth - 150; if (y > window.innerHeight - 100) y = window.innerHeight - 150; setNewTarget(); });
-    </script>
-</body>
-</html>
-`,
-            banki: `<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bańki</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: linear-gradient(180deg, #0a1628 0%, #1a2a4a 50%, #0a1628 100%); min-height: 100vh; overflow: hidden; font-family: system-ui, sans-serif; }
-        .container { width: 100vw; height: 100vh; position: relative; }
-        .bubble { position: absolute; border-radius: 50%; cursor: pointer; animation: float linear forwards; transition: transform 0.1s; }
-        .bubble:hover { transform: scale(1.1); }
-        .bubble::before { content: ''; position: absolute; top: 15%; left: 20%; width: 30%; height: 30%; background: rgba(255, 255, 255, 0.6); border-radius: 50%; filter: blur(2px); }
-        .bubble::after { content: ''; position: absolute; top: 10%; right: 15%; width: 15%; height: 15%; background: rgba(255, 255, 255, 0.4); border-radius: 50%; }
-        @keyframes float { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 5% { opacity: 1; } 95% { opacity: 1; } 100% { transform: translateY(calc(-100vh - 150px)) rotate(360deg); opacity: 0; } }
-        .pop-particle { position: absolute; border-radius: 50%; pointer-events: none; animation: popBurst 0.6s ease-out forwards; }
-        @keyframes popBurst { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; } }
-        .pop-ring { position: absolute; border-radius: 50%; border: 3px solid; pointer-events: none; animation: ringExpand 0.5s ease-out forwards; }
-        @keyframes ringExpand { 0% { width: 0; height: 0; opacity: 1; } 100% { width: 150px; height: 150px; opacity: 0; } }
-        .score-display { position: fixed; top: 30px; right: 40px; text-align: right; color: rgba(255, 255, 255, 0.4); z-index: 100; }
-        .score-display .label { font-size: 14px; }
-        .score-display .score { font-size: 56px; color: rgba(255, 255, 255, 0.7); font-weight: 300; }
-        .controls { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; z-index: 100; }
-        .control-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: rgba(255, 255, 255, 0.6); padding: 12px 25px; border-radius: 25px; cursor: pointer; font-size: 14px; transition: all 0.3s; }
-        .control-btn:hover { background: rgba(255, 255, 255, 0.2); color: white; }
-        .control-btn.active { background: rgba(100, 200, 255, 0.2); border-color: rgba(100, 200, 255, 0.4); }
-        .speed-control { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 15px; color: rgba(255, 255, 255, 0.4); font-size: 14px; }
-        .speed-slider { width: 120px; height: 6px; -webkit-appearance: none; background: rgba(255, 255, 255, 0.15); border-radius: 3px; outline: none; }
-        .speed-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: rgba(100, 200, 255, 0.7); cursor: pointer; }
-        .info { position: fixed; top: 30px; left: 40px; color: rgba(255, 255, 255, 0.3); font-size: 14px; z-index: 100; }
-    </style>
-</head>
-<body>
-    <div class="container" id="container"></div>
-    <div class="info">Klikaj bańki!</div>
-    <div class="score-display"><div class="label">Pęknięte bańki</div><div class="score" id="score">0</div></div>
-    <div class="speed-control"><span>Wolno</span><input type="range" class="speed-slider" id="speedSlider" min="1" max="5" value="2"><span>Szybko</span></div>
-    <div class="controls">
-        <button class="control-btn active" id="playBtn">▶ Graj</button>
-        <button class="control-btn" id="pauseBtn">⏸ Pauza</button>
-        <button class="control-btn" id="resetBtn">Od nowa</button>
-    </div>
-    <script>
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx = null;
-        function initAudio() { if (!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
-        const container = document.getElementById('container'), scoreEl = document.getElementById('score'), speedSlider = document.getElementById('speedSlider');
-        const playBtn = document.getElementById('playBtn'), pauseBtn = document.getElementById('pauseBtn'), resetBtn = document.getElementById('resetBtn');
-        let score = 0, isPlaying = true, bubbleInterval = null, speed = 2;
-        const bubbleColors = [
-            'radial-gradient(circle at 30% 30%, rgba(255, 150, 200, 0.4), rgba(200, 100, 255, 0.2))',
-            'radial-gradient(circle at 30% 30%, rgba(150, 200, 255, 0.4), rgba(100, 150, 255, 0.2))',
-            'radial-gradient(circle at 30% 30%, rgba(200, 255, 200, 0.4), rgba(100, 200, 150, 0.2))',
-            'radial-gradient(circle at 30% 30%, rgba(255, 220, 150, 0.4), rgba(255, 180, 100, 0.2))',
-            'radial-gradient(circle at 30% 30%, rgba(200, 150, 255, 0.4), rgba(150, 100, 200, 0.2))',
-            'radial-gradient(circle at 30% 30%, rgba(150, 255, 255, 0.4), rgba(100, 200, 200, 0.2))'
-        ];
-        const popColors = ['#ff96c8', '#96c8ff', '#c8ffc8', '#ffd896', '#c896ff', '#96ffff'];
-        function createBubble() {
-            if (!isPlaying) return;
-            const bubble = document.createElement('div');
-            bubble.className = 'bubble';
-            const size = 60 + Math.random() * 80;
-            bubble.style.width = size + 'px'; bubble.style.height = size + 'px';
-            bubble.style.left = (Math.random() * (window.innerWidth - size)) + 'px';
-            bubble.style.bottom = '-' + (size + 20) + 'px';
-            const colorIndex = Math.floor(Math.random() * bubbleColors.length);
-            bubble.style.background = bubbleColors[colorIndex];
-            bubble.style.border = '2px solid rgba(255, 255, 255, 0.3)';
-            bubble.style.boxShadow = 'inset 0 0 '+(size/3)+'px rgba(255,255,255,0.1), 0 0 '+(size/4)+'px rgba(100,150,255,0.2)';
-            bubble.dataset.colorIndex = colorIndex;
-            const duration = (12 - speed * 2) + Math.random() * 3;
-            bubble.style.animationDuration = duration + 's';
-            bubble.addEventListener('click', () => popBubble(bubble));
-            container.appendChild(bubble);
-            setTimeout(() => { if (bubble.parentNode) bubble.remove(); }, duration * 1000);
-        }
-        function popBubble(bubble) {
-            initAudio();
-            const rect = bubble.getBoundingClientRect();
-            const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
-            const color = popColors[parseInt(bubble.dataset.colorIndex)];
-            playPopSound();
-            for (let i = 0; i < 12; i++) {
-                const p = document.createElement('div'); p.className = 'pop-particle';
-                p.style.width = (5 + Math.random() * 10) + 'px'; p.style.height = p.style.width;
-                p.style.background = color; p.style.left = cx + 'px'; p.style.top = cy + 'px';
-                const angle = (i / 12) * Math.PI * 2, vel = 30 + Math.random() * 50;
-                p.style.setProperty('--tx', Math.cos(angle) * vel + 'px');
-                p.style.setProperty('--ty', Math.sin(angle) * vel + 'px');
-                container.appendChild(p); setTimeout(() => p.remove(), 600);
-            }
-            const ring = document.createElement('div'); ring.className = 'pop-ring';
-            ring.style.borderColor = color; ring.style.left = (cx - 75) + 'px'; ring.style.top = (cy - 75) + 'px';
-            container.appendChild(ring); setTimeout(() => ring.remove(), 500);
-            score++; scoreEl.textContent = score; bubble.remove();
-        }
-        function playPopSound() {
-            const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-            osc.type = 'sine'; osc.frequency.setValueAtTime(800 + Math.random() * 400, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.1);
-            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.15);
-        }
-        function startBubbles() { if (bubbleInterval) return; const interval = 2000 - (speed * 300); bubbleInterval = setInterval(createBubble, Math.max(500, interval)); createBubble(); }
-        function stopBubbles() { if (bubbleInterval) { clearInterval(bubbleInterval); bubbleInterval = null; } }
-        playBtn.onclick = () => { isPlaying = true; playBtn.classList.add('active'); pauseBtn.classList.remove('active'); startBubbles(); };
-        pauseBtn.onclick = () => { isPlaying = false; pauseBtn.classList.add('active'); playBtn.classList.remove('active'); stopBubbles(); };
-        resetBtn.onclick = () => { score = 0; scoreEl.textContent = '0'; document.querySelectorAll('.bubble').forEach(b => b.remove()); };
-        speedSlider.oninput = (e) => { speed = parseInt(e.target.value); if (isPlaying) { stopBubbles(); startBubbles(); } };
-        document.addEventListener('click', initAudio, { once: true });
-        document.addEventListener('dblclick', (e) => { if (e.target.classList.contains('bubble')) return; if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); });
-        startBubbles();
-    </script>
-</body>
-</html>
-`,
-            swiatla: `<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Światełka i Cyfry</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #0a0a0f; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Segoe UI', system-ui, sans-serif; overflow: hidden; cursor: none; }
-        .container { position: relative; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .light-orb { position: absolute; width: 120px; height: 120px; border-radius: 50%; opacity: 0; transform: scale(0); transition: all 0.8s ease-out; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .light-orb.visible { opacity: 1; transform: scale(1); }
-        .light-orb.burst { animation: burst 1.5s ease-out forwards; }
-        .light-orb::before { content: ''; position: absolute; width: 100%; height: 100%; border-radius: 50%; background: inherit; filter: blur(30px); opacity: 0.6; }
-        .light-orb::after { content: ''; position: absolute; width: 60%; height: 60%; border-radius: 50%; background: rgba(255, 255, 255, 0.8); filter: blur(10px); }
-        .number { position: absolute; font-size: 48px; font-weight: 300; color: white; opacity: 0; z-index: 10; text-shadow: 0 0 30px currentColor; transition: all 0.5s ease-out; }
-        .number.visible { opacity: 1; animation: numberPulse 2s ease-in-out infinite; }
-        @keyframes burst { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.8); opacity: 1; } 100% { transform: scale(2.2); opacity: 0; } }
-        @keyframes numberPulse { 0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.1); opacity: 1; } }
-        @keyframes gentlePulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 40px currentColor; } 50% { transform: scale(1.05); box-shadow: 0 0 60px currentColor; } }
-        .light-orb.visible:not(.burst) { animation: gentlePulse 2s ease-in-out infinite; }
-        .center-number { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 200px; font-weight: 200; color: white; opacity: 0; z-index: 100; pointer-events: none; transition: opacity 0.5s ease-out; }
-        .center-number.visible { opacity: 0.15; }
-        .instructions { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); color: rgba(255, 255, 255, 0.3); font-size: 14px; text-align: center; pointer-events: none; transition: opacity 0.5s; }
-        .instructions.hidden { opacity: 0; }
-        .restart-btn { position: fixed; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: rgba(255, 255, 255, 0.5); padding: 10px 20px; border-radius: 25px; cursor: pointer; font-size: 14px; transition: all 0.3s; z-index: 1000; }
-        .restart-btn:hover { background: rgba(255, 255, 255, 0.2); color: white; }
-        .particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; animation: particleFade 1.5s ease-out forwards; }
-        @keyframes particleFade { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0); } }
-    </style>
-</head>
-<body>
-    <div class="container" id="container"><div class="center-number" id="centerNumber">1</div></div>
-    <button class="restart-btn" id="restartBtn">Od nowa</button>
-    <div class="instructions" id="instructions">Kliknij w światełko</div>
-    <script>
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx = null;
-        function initAudio() { if (!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
-        const pianoNotes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25, 587.33, 659.25];
-        function playPianoNote(noteIndex) {
-            initAudio();
-            const freq = pianoNotes[noteIndex % pianoNotes.length];
-            const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-            osc.type = 'sine'; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            const osc2 = audioCtx.createOscillator(), gain2 = audioCtx.createGain();
-            osc2.type = 'sine'; osc2.frequency.setValueAtTime(freq * 2, audioCtx.currentTime);
-            gain2.gain.setValueAtTime(0.3, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0, audioCtx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.02);
-            gain.gain.exponentialRampToValueAtTime(0.3, audioCtx.currentTime + 0.1);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2);
-            osc.connect(gain); osc2.connect(gain2); gain2.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc2.start(); osc.stop(audioCtx.currentTime + 2); osc2.stop(audioCtx.currentTime + 2);
-        }
-        const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3', '#dda0dd', '#87ceeb', '#f8b500', '#ff8c94', '#a8e6cf', '#ffd93d'];
-        let currentNumber = 0;
-        const container = document.getElementById('container'), centerNumber = document.getElementById('centerNumber');
-        const instructions = document.getElementById('instructions'), restartBtn = document.getElementById('restartBtn');
-        function getRandomPosition() { const p = 150; return { x: p + Math.random() * (window.innerWidth - p * 2), y: p + Math.random() * (window.innerHeight - p * 2) }; }
-        function createParticles(x, y, color) {
-            for (let i = 0; i < 12; i++) {
-                const particle = document.createElement('div'); particle.className = 'particle';
-                particle.style.background = color; particle.style.left = x + 'px'; particle.style.top = y + 'px';
-                const angle = (i / 12) * Math.PI * 2, vel = 50 + Math.random() * 50;
-                particle.style.transform = 'translate(' + (Math.cos(angle) * vel) + 'px, ' + (Math.sin(angle) * vel) + 'px)';
-                container.appendChild(particle); setTimeout(() => particle.remove(), 1500);
-            }
-        }
-        function createLightOrb() {
-            if (currentNumber >= 10) { celebrateComplete(); return; }
-            const orb = document.createElement('div'); orb.className = 'light-orb';
-            const color = colors[currentNumber];
-            orb.style.background = 'radial-gradient(circle at 30% 30%, ' + color + ', ' + color + '88)';
-            orb.style.color = color; orb.style.boxShadow = '0 0 40px ' + color;
-            const pos = getRandomPosition();
-            orb.style.left = (pos.x - 60) + 'px'; orb.style.top = (pos.y - 60) + 'px';
-            const numSpan = document.createElement('span'); numSpan.className = 'number';
-            numSpan.textContent = currentNumber + 1; numSpan.style.color = 'white';
-            orb.appendChild(numSpan); container.appendChild(orb);
-            setTimeout(() => { orb.classList.add('visible'); numSpan.classList.add('visible'); }, 100);
-            orb.addEventListener('click', handleOrbClick);
-        }
-        function handleOrbClick(e) {
-            initAudio();
-            const orb = e.currentTarget; orb.removeEventListener('click', handleOrbClick);
-            instructions.classList.add('hidden'); playPianoNote(currentNumber);
-            const rect = orb.getBoundingClientRect();
-            createParticles(rect.left + rect.width / 2, rect.top + rect.height / 2, colors[currentNumber]);
-            orb.classList.add('burst'); currentNumber++;
-            centerNumber.textContent = currentNumber; centerNumber.classList.add('visible');
-            setTimeout(() => { orb.remove(); setTimeout(createLightOrb, 800); }, 1500);
-        }
-        function celebrateComplete() {
-            for (let i = 0; i < 5; i++) setTimeout(() => playPianoNote(i * 2), i * 150);
-            for (let i = 0; i < 10; i++) setTimeout(() => { const pos = getRandomPosition(); createParticles(pos.x, pos.y, colors[i]); }, i * 200);
-            centerNumber.textContent = '★'; centerNumber.style.fontSize = '250px';
-        }
-        function restart() {
-            document.querySelectorAll('.light-orb, .particle').forEach(el => el.remove());
-            currentNumber = 0; centerNumber.textContent = ''; centerNumber.classList.remove('visible');
-            centerNumber.style.fontSize = '200px'; instructions.classList.remove('hidden');
-            setTimeout(createLightOrb, 500);
-        }
-        restartBtn.onclick = restart;
-        setTimeout(createLightOrb, 1000);
-        document.addEventListener('dblclick', () => { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); });
-    </script>
-</body>
-</html>
-`,
-            spojrzenie: `<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Podążaj za Spojrzeniem</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: linear-gradient(135deg, #0a0a15 0%, #0f0f1f 100%); min-height: 100vh; overflow: hidden; font-family: system-ui, sans-serif; }
-        .container { width: 100vw; height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; }
-        .face-container { position: relative; width: 200px; height: 200px; }
-        .face { width: 200px; height: 200px; background: radial-gradient(circle at 30% 30%, #ffe4b5, #deb887); border-radius: 50%; position: relative; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); }
-        .eyes { position: absolute; top: 70px; left: 30px; right: 30px; display: flex; justify-content: space-between; }
-        .eye { width: 45px; height: 45px; background: white; border-radius: 50%; position: relative; overflow: hidden; }
-        .pupil { width: 20px; height: 20px; background: #2c1810; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); transition: all 0.5s ease-out; }
-        .pupil::after { content: ''; position: absolute; width: 6px; height: 6px; background: white; border-radius: 50%; top: 4px; left: 4px; }
-        .eyes.look-left .pupil { transform: translate(-100%, -50%); }
-        .eyes.look-right .pupil { transform: translate(0%, -50%); }
-        .eyes.look-up .pupil { transform: translate(-50%, -100%); }
-        .eyes.look-down .pupil { transform: translate(-50%, 0%); }
-        .eyes.look-center .pupil { transform: translate(-50%, -50%); }
-        .smile { position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); width: 60px; height: 25px; border-bottom: 4px solid #8b4513; border-radius: 0 0 60px 60px; }
-        .light-spot { position: absolute; width: 100px; height: 100px; border-radius: 50%; opacity: 0; transform: scale(0); transition: all 0.5s ease-out; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .light-spot.visible { opacity: 1; transform: scale(1); }
-        .light-spot.pulse { animation: lightPulse 1s ease-in-out infinite; }
-        @keyframes lightPulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 40px var(--glow-color); } 50% { transform: scale(1.1); box-shadow: 0 0 70px var(--glow-color); } }
-        .light-spot.left { left: 50px; top: 50%; transform: translateY(-50%) scale(0); }
-        .light-spot.left.visible { transform: translateY(-50%) scale(1); }
-        .light-spot.right { right: 50px; top: 50%; transform: translateY(-50%) scale(0); }
-        .light-spot.right.visible { transform: translateY(-50%) scale(1); }
-        .light-spot.top { top: 50px; left: 50%; transform: translateX(-50%) scale(0); }
-        .light-spot.top.visible { transform: translateX(-50%) scale(1); }
-        .light-spot.bottom { bottom: 80px; left: 50%; transform: translateX(-50%) scale(0); }
-        .light-spot.bottom.visible { transform: translateX(-50%) scale(1); }
-        .light-spot .icon { font-size: 50px; }
-        .particle { position: absolute; border-radius: 50%; pointer-events: none; animation: particleBurst 1s ease-out forwards; }
-        @keyframes particleBurst { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; } }
-        .instruction { position: fixed; top: 40px; left: 50%; transform: translateX(-50%); color: rgba(255, 255, 255, 0.7); font-size: 22px; text-align: center; transition: all 0.3s; }
-        .instruction.highlight { color: rgba(255, 220, 100, 0.9); font-size: 26px; }
-        .instruction.success { color: rgba(100, 255, 150, 0.9); }
-        .score-display { position: fixed; top: 30px; right: 40px; text-align: right; color: rgba(255, 255, 255, 0.4); }
-        .score-display .score { font-size: 48px; color: rgba(255, 255, 255, 0.6); }
-        .level-display { position: fixed; top: 30px; left: 40px; color: rgba(255, 255, 255, 0.5); font-size: 16px; }
-        .level-display .level { font-size: 24px; }
-        .controls { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; z-index: 100; }
-        .control-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: rgba(255, 255, 255, 0.6); padding: 12px 25px; border-radius: 25px; cursor: pointer; font-size: 14px; transition: all 0.3s; }
-        .control-btn:hover { background: rgba(255, 255, 255, 0.2); color: white; }
-        .start-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; transition: opacity 0.5s; }
-        .start-overlay.hidden { opacity: 0; pointer-events: none; }
-        .start-btn { background: linear-gradient(135deg, #4ecdc4, #44a08d); border: none; color: white; padding: 25px 50px; border-radius: 40px; font-size: 22px; cursor: pointer; transition: all 0.3s; }
-        .start-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(78, 205, 196, 0.5); }
-        .start-title { color: white; font-size: 32px; margin-bottom: 30px; font-weight: 300; }
-    </style>
-</head>
-<body>
-    <div class="start-overlay" id="startOverlay"><div class="start-title">👀 Podążaj za Spojrzeniem</div><button class="start-btn" id="startBtn">▶ Start</button></div>
-    <div class="instruction" id="instruction">Patrz, gdzie patrzę!</div>
-    <div class="level-display">Poziom <span class="level" id="level">1</span></div>
-    <div class="score-display">Punkty <div class="score" id="score">0</div></div>
-    <div class="container" id="container">
-        <div class="face-container">
-            <div class="face">
-                <div class="eyes look-center" id="eyes"><div class="eye"><div class="pupil"></div></div><div class="eye"><div class="pupil"></div></div></div>
-                <div class="smile"></div>
-            </div>
-        </div>
-        <div class="light-spot left" id="spotLeft"><span class="icon">⭐</span></div>
-        <div class="light-spot right" id="spotRight"><span class="icon">⭐</span></div>
-        <div class="light-spot top" id="spotTop"><span class="icon">⭐</span></div>
-        <div class="light-spot bottom" id="spotBottom"><span class="icon">⭐</span></div>
-    </div>
-    <div class="controls"><button class="control-btn" id="autoBtn">▶ Auto</button><button class="control-btn" id="resetBtn">Od nowa</button></div>
-    <script>
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx = null;
-        function initAudio() { if (!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
-        const container = document.getElementById('container'), eyes = document.getElementById('eyes');
-        const instruction = document.getElementById('instruction'), scoreEl = document.getElementById('score'), levelEl = document.getElementById('level');
-        const startOverlay = document.getElementById('startOverlay'), startBtn = document.getElementById('startBtn');
-        const autoBtn = document.getElementById('autoBtn'), resetBtn = document.getElementById('resetBtn');
-        const spots = { left: document.getElementById('spotLeft'), right: document.getElementById('spotRight'), top: document.getElementById('spotTop'), bottom: document.getElementById('spotBottom') };
-        const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3', '#dda0dd', '#87ceeb'];
-        let score = 0, level = 1, currentDirection = null, isWaiting = false, autoInterval = null, lookDelay = 1500;
-        const directions = ['left', 'right', 'top', 'bottom'];
-        function lookAt(dir) { eyes.className = 'eyes'; eyes.classList.add(dir ? 'look-' + dir : 'look-center'); }
-        function showLight(dir) { const color = colors[Math.floor(Math.random() * colors.length)]; const spot = spots[dir]; spot.style.background = 'radial-gradient(circle at 30% 30%, ' + color + ', ' + color + '88)'; spot.style.setProperty('--glow-color', color); spot.style.boxShadow = '0 0 40px ' + color; spot.classList.add('visible', 'pulse'); }
-        function hideAllLights() { Object.values(spots).forEach(s => s.classList.remove('visible', 'pulse')); }
-        function playLookSound() { initAudio(); const osc = audioCtx.createOscillator(), gain = audioCtx.createGain(); osc.type = 'sine'; osc.frequency.setValueAtTime(600, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.1); gain.gain.setValueAtTime(0.15, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.3); }
-        function playSuccessSound() { initAudio(); [523.25, 659.25, 783.99].forEach((freq, i) => { setTimeout(() => { const osc = audioCtx.createOscillator(), gain = audioCtx.createGain(); osc.type = 'sine'; osc.frequency.setValueAtTime(freq, audioCtx.currentTime); gain.gain.setValueAtTime(0.25, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.5); }, i * 100); }); }
-        function createParticles(x, y, color) { for (let i = 0; i < 20; i++) { const p = document.createElement('div'); p.className = 'particle'; p.style.width = (8 + Math.random() * 10) + 'px'; p.style.height = p.style.width; p.style.background = color; p.style.left = x + 'px'; p.style.top = y + 'px'; const angle = (i / 20) * Math.PI * 2, vel = 80 + Math.random() * 80; p.style.setProperty('--tx', Math.cos(angle) * vel + 'px'); p.style.setProperty('--ty', Math.sin(angle) * vel + 'px'); container.appendChild(p); setTimeout(() => p.remove(), 1000); } }
-        function startRound() {
-            if (isWaiting) return;
-            hideAllLights(); lookAt('center');
-            instruction.textContent = 'Patrz na mnie...'; instruction.className = 'instruction';
-            setTimeout(() => {
-                currentDirection = directions[Math.floor(Math.random() * directions.length)];
-                lookAt(currentDirection); playLookSound();
-                instruction.textContent = 'Patrz, gdzie patrzę!'; instruction.classList.add('highlight');
-                setTimeout(() => { showLight(currentDirection); isWaiting = true; instruction.textContent = 'Kliknij światełko!'; }, lookDelay);
-            }, 1000);
-        }
-        function handleSpotClick(dir) {
-            if (!isWaiting) return;
-            if (dir === currentDirection) {
-                isWaiting = false; score++; scoreEl.textContent = score;
-                const spot = spots[dir], rect = spot.getBoundingClientRect();
-                const color = spot.style.background.includes('#') ? spot.style.background.match(/#[a-f0-9]{6}/i)[0] : '#ffe66d';
-                createParticles(rect.left + rect.width/2, rect.top + rect.height/2, color);
-                playSuccessSound(); hideAllLights(); lookAt('center');
-                instruction.textContent = 'BRAWO! 🌟'; instruction.className = 'instruction success';
-                if (score % 5 === 0 && lookDelay > 500) { level++; levelEl.textContent = level; lookDelay = Math.max(500, lookDelay - 200); }
-                setTimeout(startRound, 1500);
-            }
-        }
-        Object.entries(spots).forEach(([dir, spot]) => spot.addEventListener('click', () => handleSpotClick(dir)));
-        startBtn.onclick = () => { initAudio(); startOverlay.classList.add('hidden'); setTimeout(startRound, 500); };
-        autoBtn.onclick = () => { if (autoInterval) { clearInterval(autoInterval); autoInterval = null; autoBtn.textContent = '▶ Auto'; } else { autoInterval = setInterval(() => { if (!isWaiting && startOverlay.classList.contains('hidden')) startRound(); }, 4000); autoBtn.textContent = '⏸ Stop'; if (!isWaiting) startRound(); } };
-        resetBtn.onclick = () => { score = 0; level = 1; lookDelay = 1500; scoreEl.textContent = '0'; levelEl.textContent = '1'; isWaiting = false; hideAllLights(); lookAt('center'); instruction.textContent = 'Patrz, gdzie patrzę!'; instruction.className = 'instruction'; if (autoInterval) { clearInterval(autoInterval); autoInterval = null; autoBtn.textContent = '▶ Auto'; } };
-        document.addEventListener('dblclick', (e) => { if (e.target.closest('.light-spot')) return; if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); });
-    </script>
-</body>
-</html>
-`,
-            spokoj: `<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strefa Spokoju</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #050510; min-height: 100vh; overflow: hidden; font-family: system-ui, sans-serif; }
-        .container { width: 100vw; height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; }
-        .breathing-orb { width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #1a2a4a, #0a1525); box-shadow: 0 0 60px rgba(100, 150, 200, 0.2), inset 0 0 40px rgba(100, 150, 200, 0.1); position: relative; }
-        .breathing-orb.breathing { animation: breathe var(--breath-duration, 8s) ease-in-out infinite; }
-        .breathing-orb.heartbeat { animation: heartbeatVisual 1s ease-in-out infinite; }
-        @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.35); } }
-        @keyframes heartbeatVisual { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.15); } 30% { transform: scale(1); } 45% { transform: scale(1.1); } }
-        .glow-ring { position: absolute; top: -40px; left: -40px; right: -40px; bottom: -40px; border-radius: 50%; background: radial-gradient(circle, rgba(100, 150, 200, 0.1) 0%, transparent 70%); }
-        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-        .particle { position: absolute; border-radius: 50%; opacity: 0.4; animation: floatUp linear infinite; }
-        @keyframes floatUp { 0% { transform: translateY(100vh); opacity: 0; } 10% { opacity: 0.4; } 90% { opacity: 0.4; } 100% { transform: translateY(-50px); opacity: 0; } }
-        .sound-modes { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 500px; }
-        .sound-mode { width: 80px; height: 80px; border-radius: 50%; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.4s; }
-        .sound-mode:hover { background: rgba(255, 255, 255, 0.1); transform: scale(1.05); }
-        .sound-mode.active { background: rgba(100, 150, 200, 0.2); border-color: rgba(100, 150, 200, 0.5); }
-        .sound-mode .icon { font-size: 28px; margin-bottom: 4px; }
-        .sound-mode .label { font-size: 10px; color: rgba(255, 255, 255, 0.5); }
-        .volume-control { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 15px; color: rgba(255, 255, 255, 0.4); }
-        .volume-slider { width: 150px; height: 6px; -webkit-appearance: none; background: rgba(255, 255, 255, 0.15); border-radius: 3px; }
-        .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: rgba(100, 150, 200, 0.7); cursor: pointer; }
-        .info-display { position: fixed; top: 30px; left: 50%; transform: translateX(-50%); text-align: center; color: rgba(255, 255, 255, 0.6); }
-        .info-display .title { font-size: 20px; font-weight: 300; }
-        .timer { position: fixed; top: 30px; right: 30px; color: rgba(255, 255, 255, 0.4); font-size: 24px; }
-    </style>
-</head>
-<body>
-    <div class="particles" id="particles"></div>
-    <div class="container"><div class="breathing-orb breathing" id="orb"><div class="glow-ring"></div></div></div>
-    <div class="info-display"><div class="title" id="currentMode">Wybierz dźwięk</div></div>
-    <div class="timer" id="timer">0:00</div>
-    <div class="sound-modes">
-        <div class="sound-mode" data-mode="breathing"><div class="icon">🌬️</div><div class="label">Oddech</div></div>
-        <div class="sound-mode" data-mode="heartbeat"><div class="icon">💓</div><div class="label">Serce</div></div>
-        <div class="sound-mode" data-mode="whitenoise"><div class="icon">📻</div><div class="label">Szum</div></div>
-        <div class="sound-mode" data-mode="lullaby"><div class="icon">🎵</div><div class="label">Kołysanka</div></div>
-        <div class="sound-mode" data-mode="ocean"><div class="icon">🌊</div><div class="label">Ocean</div></div>
-    </div>
-    <div class="volume-control"><span>🔈</span><input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50"><span>🔊</span></div>
-    <script>
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx = null, currentNodes = [], currentMode = null, volume = 0.5, timerInterval = null, seconds = 0;
-        function initAudio() { if (!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
-        const orb = document.getElementById('orb'), currentModeEl = document.getElementById('currentMode'), timerEl = document.getElementById('timer'), volumeSlider = document.getElementById('volumeSlider');
-        const modeNames = { breathing: 'Oddychanie', heartbeat: 'Bicie Serca', whitenoise: 'Biały Szum', lullaby: 'Kołysanka', ocean: 'Fale Oceanu' };
-        function stopAllSounds() { currentNodes.forEach(n => { try { if (n.stop) n.stop(); } catch(e) {} }); currentNodes = []; if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
-        function startTimer() { seconds = 0; timerInterval = setInterval(() => { seconds++; timerEl.textContent = Math.floor(seconds/60) + ':' + (seconds%60<10?'0':'') + seconds%60; }, 1000); }
-        function setOrbStyle(mode) { orb.classList.remove('breathing', 'heartbeat'); if (mode === 'heartbeat') orb.classList.add('heartbeat'); else orb.classList.add('breathing'); }
-        const soundGenerators = {
-            breathing: () => { const osc = audioCtx.createOscillator(), gain = audioCtx.createGain(); osc.type = 'sine'; osc.frequency.value = 200; gain.gain.value = 0; function cycle() { if (currentMode !== 'breathing') return; gain.gain.linearRampToValueAtTime(volume * 0.15, audioCtx.currentTime + 4); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 8); setTimeout(cycle, 8000); } osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); cycle(); currentNodes.push(osc); },
-            heartbeat: () => { function beat() { if (currentMode !== 'heartbeat') return; const osc = audioCtx.createOscillator(), gain = audioCtx.createGain(); osc.type = 'sine'; osc.frequency.value = 60; gain.gain.setValueAtTime(volume * 0.4, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.15); setTimeout(() => { if (currentMode !== 'heartbeat') return; const o2 = audioCtx.createOscillator(), g2 = audioCtx.createGain(); o2.type = 'sine'; o2.frequency.value = 50; g2.gain.setValueAtTime(volume * 0.3, audioCtx.currentTime); g2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1); o2.connect(g2); g2.connect(audioCtx.destination); o2.start(); o2.stop(audioCtx.currentTime + 0.1); }, 200); setTimeout(beat, 1000); } beat(); currentNodes.push({ stop: () => {} }); },
-            whitenoise: () => { const buf = audioCtx.createBuffer(1, 2 * audioCtx.sampleRate, audioCtx.sampleRate), d = buf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; const src = audioCtx.createBufferSource(), gain = audioCtx.createGain(); src.buffer = buf; src.loop = true; gain.gain.value = volume * 0.25; src.connect(gain); gain.connect(audioCtx.destination); src.start(); currentNodes.push(src); },
-            lullaby: () => { const notes = [{f:392,d:0.8},{f:440,d:0.4},{f:392,d:0.8},{f:330,d:0.8},{f:294,d:1.2},{f:330,d:0.8},{f:392,d:1.6}]; let i = 0, playing = true; function play() { if (!playing || currentMode !== 'lullaby') return; const n = notes[i], osc = audioCtx.createOscillator(), gain = audioCtx.createGain(); osc.type = 'sine'; osc.frequency.value = n.f; gain.gain.setValueAtTime(0, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(volume * 0.12, audioCtx.currentTime + 0.1); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + n.d); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + n.d); i = (i + 1) % notes.length; setTimeout(play, (n.d + (i === 0 ? 1.5 : 0.1)) * 1000); } play(); currentNodes.push({ stop: () => { playing = false; } }); },
-            ocean: () => { const buf = audioCtx.createBuffer(1, 2 * audioCtx.sampleRate, audioCtx.sampleRate), d = buf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; const src = audioCtx.createBufferSource(), filter = audioCtx.createBiquadFilter(), gain = audioCtx.createGain(); src.buffer = buf; src.loop = true; filter.type = 'lowpass'; filter.frequency.value = 500; gain.gain.value = volume * 0.2; const lfo = audioCtx.createOscillator(), lfoGain = audioCtx.createGain(); lfo.type = 'sine'; lfo.frequency.value = 0.08; lfoGain.gain.value = volume * 0.1; lfo.connect(lfoGain); lfoGain.connect(gain.gain); src.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination); src.start(); lfo.start(); currentNodes.push(src, lfo); }
-        };
-        function createParticles() { const c = document.getElementById('particles'); for (let i = 0; i < 20; i++) { const p = document.createElement('div'); p.className = 'particle'; p.style.width = p.style.height = (4 + Math.random() * 12) + 'px'; p.style.background = ['rgba(100,150,200,0.3)', 'rgba(150,100,200,0.3)', 'rgba(100,200,180,0.3)'][Math.floor(Math.random()*3)]; p.style.left = Math.random() * 100 + '%'; p.style.animationDuration = (25 + Math.random() * 35) + 's'; p.style.animationDelay = Math.random() * 25 + 's'; c.appendChild(p); } }
-        document.querySelectorAll('.sound-mode').forEach(btn => {
-            btn.onclick = () => { initAudio(); const mode = btn.dataset.mode; if (currentMode === mode) { stopAllSounds(); currentMode = null; document.querySelectorAll('.sound-mode').forEach(b => b.classList.remove('active')); currentModeEl.textContent = 'Wybierz dźwięk'; timerEl.textContent = '0:00'; setOrbStyle('breathing'); return; } stopAllSounds(); currentMode = mode; document.querySelectorAll('.sound-mode').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentModeEl.textContent = modeNames[mode]; setOrbStyle(mode); soundGenerators[mode](); startTimer(); };
+        // Microphone Alert Handler
+        const micAlert = document.getElementById('micAlert');
+        const micAlertBtn = document.getElementById('micAlertBtn');
+        micAlertBtn.addEventListener('click', () => {
+            micAlert.classList.remove('show');
         });
-        volumeSlider.oninput = e => { volume = e.target.value / 100; };
-        document.addEventListener('dblclick', () => { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); });
-        createParticles();
-    </script>
-</body>
-</html>
-`,
-            slowa: `<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Słowa i Obrazki</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: linear-gradient(135deg, #0a0a15 0%, #12121f 100%); min-height: 100vh; overflow: hidden; font-family: system-ui, sans-serif; }
-        .container { width: 100vw; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .instruction { color: rgba(255, 255, 255, 0.6); font-size: 24px; margin-bottom: 40px; text-align: center; }
-        .instruction.highlight { color: rgba(255, 220, 100, 0.9); font-size: 28px; }
-        .items-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-bottom: 40px; }
-        .item-card { width: 180px; height: 220px; background: rgba(255, 255, 255, 0.05); border: 3px solid rgba(255, 255, 255, 0.1); border-radius: 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; padding: 20px; }
-        .item-card:hover { transform: scale(1.05); border-color: rgba(255, 255, 255, 0.3); }
-        .item-card.correct { border-color: rgba(100, 255, 150, 0.8); background: rgba(100, 255, 150, 0.15); box-shadow: 0 0 40px rgba(100, 255, 150, 0.3); }
-        .item-card.bouncing .item-icon { animation: bounce 0.5s ease-in-out infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-15px) scale(1.1); } }
-        .item-icon { font-size: 80px; margin-bottom: 15px; }
-        .item-label { font-size: 24px; color: white; font-weight: 500; opacity: 0; transition: opacity 0.3s; }
-        .item-card.show-label .item-label { opacity: 1; }
-        .floating-word { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 60px; color: white; font-weight: 300; animation: floatWord 2s ease-out forwards; pointer-events: none; z-index: 100; text-shadow: 0 0 30px rgba(255, 255, 255, 0.5); }
-        @keyframes floatWord { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); } 20% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -150%) scale(0.8); } }
-        .particle { position: absolute; border-radius: 50%; pointer-events: none; animation: particleFly 1.5s ease-out forwards; }
-        @keyframes particleFly { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; } }
-        .score-display { position: fixed; top: 30px; right: 40px; color: rgba(255, 255, 255, 0.4); }
-        .score-display .score { font-size: 48px; color: rgba(255, 255, 255, 0.6); }
-        .controls { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; }
-        .control-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: rgba(255, 255, 255, 0.6); padding: 12px 25px; border-radius: 25px; cursor: pointer; font-size: 14px; transition: all 0.3s; }
-        .control-btn:hover { background: rgba(255, 255, 255, 0.2); color: white; }
-    </style>
-</head>
-<body>
-    <div class="container" id="container">
-        <div class="instruction" id="instruction">Kliknij na obrazek!</div>
-        <div class="items-grid" id="itemsGrid"></div>
-    </div>
-    <div class="score-display">Punkty <div class="score" id="score">0</div></div>
-    <div class="controls"><button class="control-btn" id="newRoundBtn">Nowe obrazki</button></div>
-    <script>
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx = null;
-        function initAudio() { if (!audioCtx) audioCtx = new AudioContext(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
-        const items = [
-            { id: 'kot', icon: '🐱', word: 'Kot' },
-            { id: 'pies', icon: '🐕', word: 'Pies' },
-            { id: 'dom', icon: '🏠', word: 'Dom' },
-            { id: 'slonce', icon: '☀️', word: 'Słońce' },
-            { id: 'kwiat', icon: '🌸', word: 'Kwiat' },
-            { id: 'jablko', icon: '🍎', word: 'Jabłko' },
-            { id: 'samochod', icon: '🚗', word: 'Samochód' },
-            { id: 'pilka', icon: '⚽', word: 'Piłka' },
-            { id: 'ryba', icon: '🐟', word: 'Ryba' },
-            { id: 'ptak', icon: '🐦', word: 'Ptak' },
-            { id: 'drzewo', icon: '🌳', word: 'Drzewo' },
-            { id: 'ksiezyc', icon: '🌙', word: 'Księżyc' },
-            { id: 'serce', icon: '❤️', word: 'Serce' },
-            { id: 'gwiazda', icon: '⭐', word: 'Gwiazda' },
-            { id: 'chleb', icon: '🍞', word: 'Chleb' },
-            { id: 'lody', icon: '🍦', word: 'Lody' }
-        ];
-        let score = 0, currentItems = [];
-        const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3', '#dda0dd', '#87ceeb', '#f8b500'];
-        const itemsGrid = document.getElementById('itemsGrid'), instruction = document.getElementById('instruction'), scoreEl = document.getElementById('score'), newRoundBtn = document.getElementById('newRoundBtn');
-        function speak(text) { const u = new SpeechSynthesisUtterance(text); u.lang = 'pl-PL'; u.rate = 0.8; speechSynthesis.speak(u); }
-        function generateRound() {
-            itemsGrid.innerHTML = '';
-            const shuffled = [...items].sort(() => Math.random() - 0.5);
-            currentItems = shuffled.slice(0, 4);
-            currentItems.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'item-card';
-                card.innerHTML = '<div class="item-icon">' + item.icon + '</div><div class="item-label">' + item.word + '</div>';
-                card.onclick = () => handleClick(card, item);
-                itemsGrid.appendChild(card);
-            });
-            instruction.textContent = 'Kliknij na obrazek!';
-            instruction.classList.remove('highlight');
-        }
-        function handleClick(card, item) {
-            initAudio();
-            card.classList.add('bouncing', 'show-label', 'correct');
-            speak(item.word);
-            showFloatingWord(item.word);
-            playSound();
-            score++;
-            scoreEl.textContent = score;
-            createParticles(card);
-            setTimeout(() => card.classList.remove('bouncing', 'correct'), 2000);
-        }
-        function showFloatingWord(word) { const el = document.createElement('div'); el.className = 'floating-word'; el.textContent = word; document.body.appendChild(el); setTimeout(() => el.remove(), 2000); }
-        function playSound() {
-            initAudio();
-            [523.25, 659.25, 783.99].forEach((freq, i) => {
-                setTimeout(() => {
-                    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-                    osc.type = 'sine'; osc.frequency.value = freq;
-                    gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1);
-                    osc.connect(gain); gain.connect(audioCtx.destination);
-                    osc.start(); osc.stop(audioCtx.currentTime + 1);
-                }, i * 100);
-            });
-        }
-        function createParticles(card) {
-            const rect = card.getBoundingClientRect(), cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
-            for (let i = 0; i < 15; i++) {
-                const p = document.createElement('div'); p.className = 'particle';
-                p.style.width = p.style.height = (8 + Math.random() * 10) + 'px';
-                p.style.background = colors[Math.floor(Math.random() * colors.length)];
-                p.style.left = cx + 'px'; p.style.top = cy + 'px';
-                const angle = (i / 15) * Math.PI * 2, vel = 100 + Math.random() * 100;
-                p.style.setProperty('--tx', Math.cos(angle) * vel + 'px');
-                p.style.setProperty('--ty', Math.sin(angle) * vel + 'px');
-                document.body.appendChild(p);
-                setTimeout(() => p.remove(), 1500);
-            }
-        }
-        newRoundBtn.onclick = generateRound;
-        generateRound();
-        document.addEventListener('dblclick', (e) => { if (e.target.closest('.item-card')) return; if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); });
-    </script>
-</body>
-</html>
-`,
-            dzwiek: `<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magia Dźwięku</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #0a0a0f; min-height: 100vh; overflow: hidden; font-family: system-ui, sans-serif; }
-        .container { position: relative; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .ambient { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 50%, #0a0a0f 0%, #050508 100%); transition: background 0.3s; }
-        .ambient.active { background: radial-gradient(circle at 50% 50%, #1a1a2f 0%, #0a0a0f 100%); }
-        .listener { position: relative; width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #334, #112); box-shadow: 0 0 30px rgba(100, 100, 150, 0.3); display: flex; align-items: center; justify-content: center; transition: all 0.3s; z-index: 10; }
-        .listener.listening { animation: gentlePulse 2s ease-in-out infinite; }
-        .listener.reacting { transform: scale(1.5); box-shadow: 0 0 80px rgba(255, 200, 100, 0.8); }
-        @keyframes gentlePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        .listener-inner { width: 60%; height: 60%; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #556, #223); display: flex; align-items: center; justify-content: center; }
-        .listener-core { width: 50%; height: 50%; border-radius: 50%; background: #99a; transition: all 0.1s; }
-        .listener.reacting .listener-core { background: #ffdd66; box-shadow: 0 0 30px #ffaa00; }
-        .sound-ring { position: absolute; border-radius: 50%; border: 3px solid; animation: expandRing 1s ease-out forwards; pointer-events: none; left: 50%; top: 50%; transform: translate(-50%, -50%); }
-        @keyframes expandRing { 0% { width: 150px; height: 150px; opacity: 1; } 100% { width: 600px; height: 600px; opacity: 0; } }
-        .particle { position: absolute; width: 12px; height: 12px; border-radius: 50%; animation: particleExplode 1.5s ease-out forwards; }
-        @keyframes particleExplode { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; } }
-        .float-number { position: absolute; font-size: 80px; font-weight: 200; color: white; opacity: 0; animation: floatUp 2s ease-out forwards; pointer-events: none; text-shadow: 0 0 30px currentColor; }
-        @keyframes floatUp { 0% { opacity: 0; transform: translateY(0) scale(0.5); } 20% { opacity: 1; transform: translateY(-20px) scale(1); } 100% { opacity: 0; transform: translateY(-150px) scale(0.8); } }
-        .start-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; transition: opacity 0.5s; }
-        .start-overlay.hidden { opacity: 0; pointer-events: none; }
-        .start-btn { background: linear-gradient(135deg, #667, #445); border: 2px solid #889; color: white; padding: 30px 60px; border-radius: 50px; font-size: 24px; cursor: pointer; transition: all 0.3s; margin-bottom: 20px; }
-        .start-btn:hover { background: linear-gradient(135deg, #778, #556); transform: scale(1.05); }
-        .start-info { color: rgba(255, 255, 255, 0.5); font-size: 16px; text-align: center; max-width: 400px; }
-        .counter { position: fixed; top: 30px; right: 40px; font-size: 56px; color: rgba(255, 255, 255, 0.7); font-weight: 200; }
-        .info-text { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); color: rgba(255, 255, 255, 0.3); font-size: 14px; }
-        .controls { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; align-items: center; z-index: 100; }
-        .sensitivity-label { color: rgba(255, 255, 255, 0.4); font-size: 14px; }
-        .sensitivity-slider { width: 150px; height: 6px; -webkit-appearance: none; background: rgba(255, 255, 255, 0.2); border-radius: 3px; }
-        .sensitivity-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #99a; cursor: pointer; }
-    </style>
-</head>
-<body>
-    <div class="start-overlay" id="startOverlay">
-        <button class="start-btn" id="startBtn">🎤 Włącz mikrofon</button>
-        <p class="start-info">Mów, klaskaj, wydawaj dźwięki — zobacz magię!</p>
-    </div>
-    <div class="container" id="container">
-        <div class="ambient" id="ambient"></div>
-        <div class="listener" id="listener"><div class="listener-inner"><div class="listener-core" id="core"></div></div></div>
-    </div>
-    <div class="counter" id="counter">0</div>
-    <div class="info-text">Wydaj dźwięk!</div>
-    <div class="controls">
-        <span class="sensitivity-label">Czułość:</span>
-        <input type="range" class="sensitivity-slider" id="sensitivity" min="1" max="10" value="5">
-    </div>
-    <script>
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx = null, analyser = null, microphone = null, isListening = false;
-        const container = document.getElementById('container'), listener = document.getElementById('listener'), ambient = document.getElementById('ambient'), core = document.getElementById('core');
-        const startOverlay = document.getElementById('startOverlay'), startBtn = document.getElementById('startBtn'), sensitivitySlider = document.getElementById('sensitivity'), counterEl = document.getElementById('counter');
-        let reactionCount = 0, lastReactionTime = 0, sensitivity = 5;
-        const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3', '#dda0dd', '#87ceeb', '#f8b500', '#ff8c94', '#a8e6cf', '#ffd93d', '#ff9a9e', '#a1c4fd'];
-        const pianoNotes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25, 587.33, 659.25];
-        function playPianoChord() {
-            if (!audioCtx) return;
-            const baseIndex = Math.floor(Math.random() * 5);
-            [pianoNotes[baseIndex], pianoNotes[baseIndex + 2], pianoNotes[baseIndex + 4]].forEach((freq, i) => {
-                setTimeout(() => {
-                    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-                    osc.type = 'sine'; osc.frequency.value = freq;
-                    gain.gain.setValueAtTime(0, audioCtx.currentTime);
-                    gain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.05);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2);
-                    const osc2 = audioCtx.createOscillator(), gain2 = audioCtx.createGain();
-                    osc2.type = 'sine'; osc2.frequency.value = freq * 2; gain2.gain.value = 0.05;
-                    osc.connect(gain); osc2.connect(gain2); gain2.connect(gain); gain.connect(audioCtx.destination);
-                    osc.start(); osc2.start(); osc.stop(audioCtx.currentTime + 2); osc2.stop(audioCtx.currentTime + 2);
-                }, i * 50);
-            });
-        }
-        function createSoundRing(color) { const ring = document.createElement('div'); ring.className = 'sound-ring'; ring.style.borderColor = color; container.appendChild(ring); setTimeout(() => ring.remove(), 1000); }
-        function createFirework(x, y) {
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            for (let i = 0; i < 20; i++) {
-                const p = document.createElement('div'); p.className = 'particle';
-                p.style.background = color; p.style.boxShadow = '0 0 10px ' + color;
-                p.style.left = x + 'px'; p.style.top = y + 'px';
-                const angle = (i / 20) * Math.PI * 2, vel = 100 + Math.random() * 150;
-                p.style.setProperty('--tx', Math.cos(angle) * vel + 'px');
-                p.style.setProperty('--ty', Math.sin(angle) * vel + 'px');
-                container.appendChild(p); setTimeout(() => p.remove(), 1500);
-            }
-            return color;
-        }
-        function createFloatingNumber(x, y, color) { const num = document.createElement('div'); num.className = 'float-number'; num.textContent = reactionCount; num.style.left = x + 'px'; num.style.top = y + 'px'; num.style.color = color; container.appendChild(num); setTimeout(() => num.remove(), 2000); }
-        function triggerReaction() {
-            const now = Date.now();
-            if (now - lastReactionTime < 300) return;
-            lastReactionTime = now;
-            reactionCount++;
-            counterEl.textContent = reactionCount;
-            listener.classList.add('reacting');
-            ambient.classList.add('active');
-            const positions = [
-                { x: window.innerWidth * 0.2, y: window.innerHeight * 0.3 },
-                { x: window.innerWidth * 0.8, y: window.innerHeight * 0.3 },
-                { x: window.innerWidth * 0.5, y: window.innerHeight * 0.2 },
-                { x: window.innerWidth * 0.3, y: window.innerHeight * 0.7 },
-                { x: window.innerWidth * 0.7, y: window.innerHeight * 0.7 }
-            ];
-            const pos = positions[Math.floor(Math.random() * positions.length)];
-            const color = createFirework(pos.x, pos.y);
-            createSoundRing(color);
-            createFloatingNumber(pos.x, pos.y - 50, color);
-            playPianoChord();
-            setTimeout(() => { listener.classList.remove('reacting'); ambient.classList.remove('active'); }, 300);
-        }
-        async function startListening() {
-            try {
-                audioCtx = new AudioContext();
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
-                microphone = audioCtx.createMediaStreamSource(stream);
-                analyser = audioCtx.createAnalyser();
-                analyser.fftSize = 256;
-                analyser.smoothingTimeConstant = 0.3;
-                microphone.connect(analyser);
-                isListening = true;
-                listener.classList.add('listening');
-                startOverlay.classList.add('hidden');
-                detectSound();
-            } catch (err) {
-                alert('Nie można uzyskać dostępu do mikrofonu.');
-            }
-        }
-        function detectSound() {
-            if (!isListening) return;
-            const dataArray = new Uint8Array(analyser.frequencyBinCount);
-            analyser.getByteFrequencyData(dataArray);
-            const average = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
-            const threshold = 60 - (sensitivity * 5);
-            const level = Math.min(average / 100, 1);
-            core.style.transform = 'scale(' + (1 + level * 0.5) + ')';
-            if (average > threshold) triggerReaction();
-            requestAnimationFrame(detectSound);
-        }
-        startBtn.onclick = startListening;
-        sensitivitySlider.oninput = e => { sensitivity = parseInt(e.target.value); };
-        document.addEventListener('dblclick', () => { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); });
-    </script>
-</body>
-</html>
-`,
-        };
 
         const navPanel = document.getElementById('navPanel');
         const gameContainer = document.getElementById('gameContainer');
@@ -1178,14 +440,33 @@
 
         // Game card click handlers
         document.querySelectorAll('.game-card').forEach(card => {
-            card.addEventListener('click', () => {
+            card.addEventListener('click', async () => {
                 const gameName = card.dataset.game;
-                loadGame(gameName);
+                
+                if (gameName === 'dzwiek') {
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({ 
+                            audio: { 
+                                echoCancellation: false, 
+                                noiseSuppression: false, 
+                                autoGainControl: false 
+                            } 
+                        });
+                        stream.getTracks().forEach(track => track.stop());
+                        loadGame(gameName);
+                    } catch (err) {
+                        console.error('Microphone permission denied:', err);
+                        micAlert.classList.add('show');
+                        return;
+                    }
+                } else {
+                    loadGame(gameName);
+                }
             });
         });
 
         function loadGame(gameName) {
-            const gameHtml = games[gameName];
+            const gameHtml = window.GAMES[gameName];
             if (!gameHtml) return;
 
             const iframe = document.createElement('iframe');
@@ -1258,6 +539,11 @@
                 e.preventDefault();
             }
         }, { passive: false });
+
+        // Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
     </script>
 </body>
 </html>
