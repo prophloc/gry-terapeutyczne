@@ -1567,141 +1567,167 @@ window.GAMES = {
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Gitara Dźwięku</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         body {
-            background: linear-gradient(135deg, #0a0a0f 0%, #1a1520 50%, #0a0a0f 100%);
+            background: #000;
             min-height: 100vh;
+            min-height: -webkit-fill-available;
             overflow: hidden;
-            font-family: system-ui, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            position: fixed;
+            width: 100%;
+            height: 100%;
         }
 
         .container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: linear-gradient(to bottom, #000000 0%, #1a0a2e 50%, #000000 100%);
         }
 
-        /* Guitar strings */
+        /* Guitar Hero style strings - vertical */
         .strings-container {
             position: relative;
-            width: 80%;
-            max-width: 800px;
-            height: 60vh;
+            width: 90%;
+            max-width: 400px;
+            height: 80%;
+            display: flex;
+            justify-content: space-around;
+            align-items: stretch;
+            padding: 0 20px;
+        }
+
+        .string-track {
+            position: relative;
+            flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: space-around;
-            padding: 40px 0;
-        }
-
-        .string-wrapper {
-            position: relative;
-            width: 100%;
-            height: 40px;
-            display: flex;
             align-items: center;
+            margin: 0 2px;
         }
 
-        .string {
+        /* Vertical string line */
+        .string-line {
             position: absolute;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--string-color), transparent);
-            box-shadow: 0 0 10px var(--string-color), 0 0 20px var(--string-color);
-            transform-origin: center;
-            transition: height 0.05s ease-out;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, transparent, var(--string-color) 20%, var(--string-color) 80%, transparent);
+            opacity: 0.3;
+            border-radius: 2px;
         }
 
-        .string.vibrating {
-            animation: stringVibrate 0.1s ease-in-out;
+        /* Hit zone at bottom */
+        .hit-zone {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--string-color);
+            border-radius: 50%;
+            opacity: 0.5;
+            box-shadow: 0 0 20px var(--string-color);
         }
 
-        @keyframes stringVibrate {
-            0%, 100% { transform: translateY(0) scaleY(1); }
-            25% { transform: translateY(-8px) scaleY(1.5); }
-            75% { transform: translateY(8px) scaleY(1.5); }
+        /* Active indicator (glows when sound detected) */
+        .string-indicator {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            width: 50px;
+            height: 50px;
+            background: var(--string-color);
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.1s ease-out;
+            box-shadow: 0 0 30px var(--string-color);
         }
 
-        /* String labels */
+        .string-indicator.active {
+            transform: translateX(-50%) scale(1.5);
+            opacity: 1;
+        }
+
+        /* Note falling down the string */
+        .note {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 45px;
+            height: 45px;
+            background: var(--string-color);
+            border: 3px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--string-color);
+            animation: noteFall 2s linear;
+            pointer-events: none;
+        }
+
+        @keyframes noteFall {
+            0% {
+                top: -50px;
+                opacity: 1;
+            }
+            100% {
+                top: calc(100% - 50px);
+                opacity: 0;
+            }
+        }
+
+        /* Burst effect when note hits */
+        .burst-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--string-color);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: burstFly 0.6s ease-out forwards;
+        }
+
+        @keyframes burstFly {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--burst-x), var(--burst-y)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* String label at top */
         .string-label {
             position: absolute;
-            left: -60px;
+            top: 10px;
+            font-size: 11px;
             color: var(--string-color);
-            font-size: 14px;
             font-weight: 600;
-            text-shadow: 0 0 10px var(--string-color);
-            opacity: 0.6;
-        }
-
-        .frequency-bar {
-            position: absolute;
-            right: -80px;
-            width: 60px;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .frequency-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--string-color);
-            transition: width 0.1s ease-out;
-            box-shadow: 0 0 10px var(--string-color);
-        }
-
-        /* Wave particles that shoot out */
-        .wave-particle {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            pointer-events: none;
-            animation: waveShoot 1.5s ease-out forwards;
-        }
-
-        @keyframes waveShoot {
-            0% {
-                transform: translateX(0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translateX(var(--shoot-x)) translateY(var(--shoot-y)) scale(0.3);
-                opacity: 0;
-            }
-        }
-
-        /* Ripple effect */
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            border: 3px solid;
-            pointer-events: none;
-            animation: rippleExpand 1s ease-out forwards;
-        }
-
-        @keyframes rippleExpand {
-            0% {
-                width: 0;
-                height: 0;
-                opacity: 1;
-            }
-            100% {
-                width: 200px;
-                height: 200px;
-                opacity: 0;
-            }
+            text-shadow: 0 0 5px var(--string-color);
+            opacity: 0.7;
+            z-index: 10;
         }
 
         /* Start overlay */
@@ -1729,124 +1755,137 @@ window.GAMES = {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
             color: white;
-            padding: 25px 50px;
+            padding: 20px 50px;
             border-radius: 50px;
-            font-size: 24px;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+            font-size: 20px;
             font-weight: 600;
-        }
-
-        .start-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.6);
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
         }
 
         .start-info {
             color: rgba(255, 255, 255, 0.6);
-            font-size: 16px;
+            font-size: 14px;
             margin-top: 20px;
             text-align: center;
-            max-width: 400px;
+            padding: 0 30px;
             line-height: 1.6;
         }
 
-        /* Counter */
+        /* Score counter */
         .counter {
             position: fixed;
-            top: 40px;
+            top: max(30px, env(safe-area-inset-top, 20px));
             left: 50%;
             transform: translateX(-50%);
-            font-size: 72px;
-            font-weight: 200;
-            color: rgba(255, 255, 255, 0.8);
-            text-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
+            font-size: 48px;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 0 20px rgba(102, 126, 234, 0.8);
             z-index: 100;
         }
 
         /* Info text */
         .info-text {
             position: fixed;
-            bottom: 120px;
+            top: max(90px, calc(env(safe-area-inset-top, 20px) + 60px));
             left: 50%;
             transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 18px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
             text-align: center;
-        }
-
-        /* Controls */
-        .controls {
-            position: fixed;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 20px;
-            align-items: center;
             z-index: 100;
         }
 
+        /* Sensitivity control */
+        .controls {
+            position: fixed;
+            bottom: max(20px, env(safe-area-inset-bottom, 20px));
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 25px;
+        }
+
         .sensitivity-label {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
         }
 
         .sensitivity-slider {
-            width: 150px;
-            height: 6px;
+            width: 100px;
+            height: 4px;
             -webkit-appearance: none;
             background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
+            border-radius: 2px;
             outline: none;
         }
 
         .sensitivity-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #667eea;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
         }
 
-        /* Note indicator */
-        .note-indicator {
+        /* Combo indicator */
+        .combo {
             position: fixed;
-            top: 140px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            font-size: 48px;
-            font-weight: 300;
-            color: rgba(255, 255, 255, 0.6);
-            text-shadow: 0 0 20px currentColor;
+            transform: translate(-50%, -50%);
+            font-size: 72px;
+            font-weight: 700;
+            color: #ffd700;
+            text-shadow: 0 0 30px #ffd700;
             opacity: 0;
-            transition: opacity 0.2s;
+            pointer-events: none;
+            z-index: 200;
         }
 
-        .note-indicator.active {
-            opacity: 1;
+        .combo.show {
+            animation: comboShow 0.5s ease-out;
+        }
+
+        @keyframes comboShow {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1);
+            }
         }
     </style>
 </head>
 <body>
     <div class="start-overlay" id="startOverlay">
         <button class="start-btn" id="startBtn">🎸 Rozpocznij</button>
-        <p class="start-info">Śpiewaj, gwiżdż, mów — zobacz jak struny reagują na twój głos!<br>Różne tony aktywują różne struny.</p>
+        <p class="start-info">Wydawaj dźwięki - wysokie aktywują górne struny,<br>niskie - dolne struny!</p>
     </div>
 
-    <div class="container" id="container">
+    <div class="container">
         <div class="strings-container" id="stringsContainer"></div>
     </div>
 
     <div class="counter" id="counter">0</div>
-    <div class="note-indicator" id="noteIndicator">🎵</div>
-    <div class="info-text">Wydaj dźwięk!</div>
+    <div class="info-text">Wydaj dźwięk! 🎤</div>
+    <div class="combo" id="combo"></div>
 
     <div class="controls">
-        <span class="sensitivity-label">Czułość:</span>
+        <span class="sensitivity-label">Czułość</span>
         <input type="range" class="sensitivity-slider" id="sensitivity" min="1" max="10" value="5">
     </div>
 
@@ -1857,75 +1896,415 @@ window.GAMES = {
         let microphone = null;
         let isListening = false;
 
-        const container = document.getElementById('container');
+        const container = document.querySelector('.container');
         const stringsContainer = document.getElementById('stringsContainer');
         const startOverlay = document.getElementById('startOverlay');
         const startBtn = document.getElementById('startBtn');
         const sensitivitySlider = document.getElementById('sensitivity');
         const counterEl = document.getElementById('counter');
-        const noteIndicator = document.getElementById('noteIndicator');
+        const comboEl = document.getElementById('combo');
 
-        let reactionCount = 0;
+        let score = 0;
+        let combo = 0;
         let sensitivity = 5;
 
-        // Define 6 strings with their frequency ranges and colors
+        // 6 strings with frequency ranges
         const strings = [
-            { name: 'Wysoki', color: '#ff6b9d', freqMin: 800, freqMax: 2000 },
-            { name: 'Średni+', color: '#c44569', freqMin: 500, freqMax: 800 },
-            { name: 'Średni', color: '#f39c12', freqMin: 300, freqMax: 500 },
-            { name: 'Średni-', color: '#feca57', freqMin: 200, freqMax: 300 },
-            { name: 'Niski', color: '#48dbfb', freqMin: 120, freqMax: 200 },
-            { name: 'Bas', color: '#5f27cd', freqMin: 50, freqMax: 120 },
+            { name: 'E', color: '#ff0844', freqMin: 700, freqMax: 2000 },   // Red - highest
+            { name: 'A', color: '#ff8c00', freqMin: 450, freqMax: 700 },    // Orange
+            { name: 'D', color: '#ffd700', freqMin: 280, freqMax: 450 },    // Yellow
+            { name: 'G', color: '#00ff41', freqMin: 180, freqMax: 280 },    // Green
+            { name: 'B', color: '#00bfff', freqMin: 110, freqMax: 180 },    // Blue
+            { name: 'e', color: '#9d00ff', freqMin: 50, freqMax: 110 }      // Purple - lowest
         ];
 
         const stringElements = [];
 
-        // Create string elements
         function createStrings() {
             strings.forEach((string, index) => {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'string-wrapper';
+                const track = document.createElement('div');
+                track.className = 'string-track';
+                
+                const line = document.createElement('div');
+                line.className = 'string-line';
+                line.style.setProperty('--string-color', string.color);
                 
                 const label = document.createElement('div');
                 label.className = 'string-label';
                 label.textContent = string.name;
                 label.style.setProperty('--string-color', string.color);
                 
-                const stringEl = document.createElement('div');
-                stringEl.className = 'string';
-                stringEl.style.setProperty('--string-color', string.color);
+                const hitZone = document.createElement('div');
+                hitZone.className = 'hit-zone';
+                hitZone.style.setProperty('--string-color', string.color);
                 
-                const freqBar = document.createElement('div');
-                freqBar.className = 'frequency-bar';
-                const freqFill = document.createElement('div');
-                freqFill.className = 'frequency-fill';
-                freqFill.style.setProperty('--string-color', string.color);
-                freqBar.appendChild(freqFill);
+                const indicator = document.createElement('div');
+                indicator.className = 'string-indicator';
+                indicator.style.setProperty('--string-color', string.color);
                 
-                wrapper.appendChild(label);
-                wrapper.appendChild(stringEl);
-                wrapper.appendChild(freqBar);
-                stringsContainer.appendChild(wrapper);
+                track.appendChild(line);
+                track.appendChild(label);
+                track.appendChild(hitZone);
+                track.appendChild(indicator);
+                stringsContainer.appendChild(track);
                 
                 stringElements.push({
-                    string: stringEl,
-                    fill: freqFill,
-                    wrapper: wrapper,
+                    track: track,
+                    indicator: indicator,
                     config: string
                 });
             });
         }
 
-        function createWaveParticles(stringIndex) {
-            const wrapper = stringElements[stringIndex].wrapper;
-            const rect = wrapper.getBoundingClientRect();
+        function createNote(stringIndex) {
+            const track = stringElements[stringIndex].track;
             const color = strings[stringIndex].color;
             
-            for (let i = 0; i < 8; i++) {
+            const note = document.createElement('div');
+            note.className = 'note';
+            note.style.setProperty('--string-color', color);
+            
+            track.appendChild(note);
+            
+            setTimeout(() => note.remove(), 2000);
+        }
+
+        function createBurst(stringIndex) {
+            const track = stringElements[stringIndex].track;
+            const rect = track.getBoundingClientRect();
+            const color = strings[stringIndex].color;
+            
+            for (let i = 0; i < 12; i++) {
                 const particle = document.createElement('div');
-                particle.className = 'wave-particle';
-                particle.style.background = color;
-                particle.style.boxShadow = \`0 0 15px \${color}\`;
+                particle.className = 'burst-particle';
+                particle.style.setProperty('--string-color', color);
+                particle.style.left = '50%';
+                particle.style.bottom = '60px';
+                
+                const angle = (Math.PI * 2 * i) / 12;
+                const distance = 30 + Math.random() * 30;
+                particle.style.setProperty('--burst-x', \`\${Math.cos(angle) * distance}px\`);
+                particle.style.setProperty('--burst-y', \`\${Math.sin(angle) * distance}px\`);
+                
+                track.appendChild(particle);
+                setTimeout(() => particle.remove(), 600);
+            }
+        }
+
+        function playGuitarSound(stringIndex) {
+            if (!audioCtx) return;
+            
+            const config = strings[stringIndex];
+            const baseFreq = (config.freqMin + config.freqMax) / 2;
+            
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(baseFreq, audioCtx.currentTime);
+            
+            gain.gain.setValueAtTime(0, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+        }
+
+        function showCombo() {
+            if (combo > 0 && combo % 5 === 0) {
+                comboEl.textContent = \`\${combo}x COMBO!\`;
+                comboEl.classList.remove('show');
+                void comboEl.offsetWidth;
+                comboEl.classList.add('show');
+            }
+        }
+
+        function triggerString(stringIndex) {
+            const element = stringElements[stringIndex];
+            
+            // Visual feedback
+            element.indicator.classList.add('active');
+            setTimeout(() => {
+                element.indicator.classList.remove('active');
+            }, 200);
+            
+            // Create note and burst
+            createNote(stringIndex);
+            createBurst(stringIndex);
+            
+            // Play sound
+            playGuitarSound(stringIndex);
+            
+            // Update score
+            score++;
+            combo++;
+            counterEl.textContent = score;
+            showCombo();
+        }
+
+        async function startListening() {
+            try {
+                audioCtx = new AudioContext();
+                
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: { 
+                        echoCancellation: false,
+                        noiseSuppression: false,
+                        autoGainControl: false
+                    } 
+                });
+
+                microphone = audioCtx.createMediaStreamSource(stream);
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 2048;
+                analyser.smoothingTimeConstant = 0.3;
+
+                microphone.connect(analyser);
+
+                isListening = true;
+                startOverlay.classList.add('hidden');
+
+                detectSound();
+
+            } catch (err) {
+                alert('Nie można uzyskać dostępu do mikrofonu.');
+            }
+        }
+
+        let lastTrigger = {};
+        strings.forEach((_, i) => lastTrigger[i] = 0);
+        let lastActivity = 0;
+
+        function detectSound() {
+            if (!isListening) return;
+
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            analyser.getByteFrequencyData(dataArray);
+
+            const nyquist = audioCtx.sampleRate / 2;
+            const freqResolution = nyquist / bufferLength;
+            const baseThreshold = 50 - (sensitivity * 4);
+            const now = Date.now();
+
+            let anyActivity = false;
+
+            stringElements.forEach((element, index) => {
+                const config = element.config;
+                
+                const minBin = Math.floor(config.freqMin / freqResolution);
+                const maxBin = Math.ceil(config.freqMax / freqResolution);
+                
+                let sum = 0;
+                let count = 0;
+                for (let i = minBin; i <= maxBin && i < bufferLength; i++) {
+                    sum += dataArray[i];
+                    count++;
+                }
+                const average = count > 0 ? sum / count : 0;
+                
+                if (average > baseThreshold && now - lastTrigger[index] > 250) {
+                    triggerString(index);
+                    lastTrigger[index] = now;
+                    anyActivity = true;
+                }
+            });
+
+            // Reset combo if no activity for 2 seconds
+            if (anyActivity) {
+                lastActivity = now;
+            } else if (now - lastActivity > 2000) {
+                combo = 0;
+            }
+
+            requestAnimationFrame(detectSound);
+        }
+
+        startBtn.addEventListener('click', startListening);
+        sensitivitySlider.addEventListener('input', (e) => {
+            sensitivity = parseInt(e.target.value);
+        });
+
+        createStrings();
+    </script>
+</body>
+</html>
+`0 0 10px \${color}\`;
+                particle.style.left = \`\${rect.left + rect.width / 2}px\`;
+                particle.style.top = \`\${rect.top + rect.height / 2}px\`;
+                
+                const angle = (Math.PI * 2 * i) / 12;
+                const distance = 40 + Math.random() * 40;
+                particle.style.setProperty('--tx', \`\${Math.cos(angle) * distance}px\`);
+                particle.style.setProperty('--ty', \`\${Math.sin(angle) * distance}px\`);
+                
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 800);
+            }
+        }
+
+        function playStringSound(stringIndex) {
+            if (!audioCtx) return;
+            
+            const config = strings[stringIndex];
+            const baseFreq = (config.freqMin + config.freqMax) / 2;
+            
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(baseFreq, audioCtx.currentTime);
+            
+            gain.gain.setValueAtTime(0, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.25, audioCtx.currentTime + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.4);
+        }
+
+        function hitString(stringIndex) {
+            const element = stringElements[stringIndex];
+            
+            // Visual feedback
+            element.line.classList.add('active');
+            element.hitZone.classList.add('hit');
+            
+            setTimeout(() => {
+                element.line.classList.remove('active');
+                element.hitZone.classList.remove('hit');
+            }, 300);
+            
+            // Create note and particles
+            createNote(stringIndex);
+            createParticles(stringIndex);
+            playStringSound(stringIndex);
+            
+            // Update counter
+            hitCount++;
+            counterEl.textContent = hitCount;
+            
+            // Combo system
+            const now = Date.now();
+            if (now - lastHitTime < 1000) {
+                combo++;
+                if (combo >= 5 && combo % 5 === 0) {
+                    showCombo(strings[stringIndex].color);
+                }
+            } else {
+                combo = 1;
+            }
+            lastHitTime = now;
+        }
+
+        function showCombo(color) {
+            comboEl.style.setProperty('--combo-color', color);
+            comboEl.classList.remove('show');
+            void comboEl.offsetWidth;
+            comboEl.classList.add('show');
+        }
+
+        async function startListening() {
+            try {
+                audioCtx = new AudioContext();
+                
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: { 
+                        echoCancellation: false,
+                        noiseSuppression: false,
+                        autoGainControl: false
+                    } 
+                });
+
+                microphone = audioCtx.createMediaStreamSource(stream);
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 2048;
+                analyser.smoothingTimeConstant = 0.3;
+
+                microphone.connect(analyser);
+                isListening = true;
+                startOverlay.classList.add('hidden');
+
+                detectSound();
+
+            } catch (err) {
+                console.error('Microphone error:', err);
+                alert('Nie można uzyskać dostępu do mikrofonu. Sprawdź uprawnienia w ustawieniach.');
+            }
+        }
+
+        let lastTriggerTime = {};
+        strings.forEach((_, i) => lastTriggerTime[i] = 0);
+
+        function detectSound() {
+            if (!isListening) return;
+
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            analyser.getByteFrequencyData(dataArray);
+
+            const nyquist = audioCtx.sampleRate / 2;
+            const freqResolution = nyquist / bufferLength;
+            const baseThreshold = 60 - (sensitivity * 5);
+            const now = Date.now();
+
+            stringElements.forEach((element, index) => {
+                const config = element.config;
+                
+                const minBin = Math.floor(config.freqMin / freqResolution);
+                const maxBin = Math.ceil(config.freqMax / freqResolution);
+                
+                let sum = 0;
+                let count = 0;
+                for (let i = minBin; i <= maxBin && i < bufferLength; i++) {
+                    sum += dataArray[i];
+                    count++;
+                }
+                const average = count > 0 ? sum / count : 0;
+                
+                if (average > baseThreshold && now - lastTriggerTime[index] > 300) {
+                    hitString(index);
+                    lastTriggerTime[index] = now;
+                }
+            });
+
+            requestAnimationFrame(detectSound);
+        }
+
+        // Event listeners
+        startBtn.addEventListener('click', startListening);
+
+        sensitivitySlider.addEventListener('input', (e) => {
+            sensitivity = parseInt(e.target.value);
+        });
+
+        // Fullscreen on double tap
+        let lastTap = 0;
+        document.addEventListener('touchend', () => {
+            const now = Date.now();
+            if (now - lastTap < 300) {
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen();
+                }
+            }
+            lastTap = now;
+        });
+
+        // Initialize
+        createStrings();
+    </script>
+</body>
+</html>
+`0 0 15px \${color}\`;
                 particle.style.left = \`\${rect.left + rect.width / 2}px\`;
                 particle.style.top = \`\${rect.top + rect.height / 2}px\`;
                 
