@@ -115,7 +115,6 @@
             width: 100%;
             height: 100%;
             display: none;
-            z-index: 1000;
         }
         
         .game-container.active {
@@ -128,16 +127,11 @@
             border: none;
         }
         
-        .game-direct {
-            width: 100%;
-            height: 100%;
-        }
-        
         .back-btn {
             position: fixed;
             top: max(15px, env(safe-area-inset-top, 10px));
             left: 15px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.5);
             color: white;
             border: none;
             width: 44px;
@@ -174,7 +168,7 @@
         
         <div class="notice">
             <strong>🎤 Mikrofon</strong>
-            Gra "Gitara Dźwięku" potrzebuje mikrofonu - gdy przeglądarka zapyta, kliknij "Zezwól"!
+            Gra "Gitara Dźwięku" potrzebuje dostępu do mikrofonu - kliknij "Zezwól"!
         </div>
         
         <div class="games-grid">
@@ -217,7 +211,6 @@
     
     <div class="game-container" id="gameContainer">
         <iframe class="game-frame" id="gameFrame"></iframe>
-        <div class="game-direct" id="gameDirect"></div>
     </div>
     
     <script>
@@ -235,41 +228,12 @@
         function loadGame(gameName) {
             const gameContainer = document.getElementById('gameContainer');
             const gameFrame = document.getElementById('gameFrame');
-            const gameDirect = document.getElementById('gameDirect');
             const menu = document.getElementById('menu');
             const backBtn = document.getElementById('backBtn');
             
-            // Decode base64
+            // Decode base64 and load into iframe
             const decoded = atob(GAMES_BASE64[gameName]);
-            
-            // For microphone game (dzwiek), load directly (not in iframe)
-            if (gameName === 'dzwiek') {
-                // Clear iframe
-                gameFrame.srcdoc = '';
-                gameFrame.style.display = 'none';
-                
-                // Load directly into page
-                gameDirect.innerHTML = decoded;
-                gameDirect.style.display = 'block';
-                
-                // Execute scripts in the loaded content
-                const scripts = gameDirect.querySelectorAll('script');
-                scripts.forEach(oldScript => {
-                    const newScript = document.createElement('script');
-                    if (oldScript.src) {
-                        newScript.src = oldScript.src;
-                    } else {
-                        newScript.textContent = oldScript.textContent;
-                    }
-                    oldScript.parentNode.replaceChild(newScript, oldScript);
-                });
-            } else {
-                // For other games, use iframe
-                gameDirect.innerHTML = '';
-                gameDirect.style.display = 'none';
-                gameFrame.style.display = 'block';
-                gameFrame.srcdoc = decoded;
-            }
+            gameFrame.srcdoc = decoded;
             
             // Show game, hide menu
             gameContainer.classList.add('active');
@@ -280,13 +244,11 @@
         function showMenu() {
             const gameContainer = document.getElementById('gameContainer');
             const gameFrame = document.getElementById('gameFrame');
-            const gameDirect = document.getElementById('gameDirect');
             const menu = document.getElementById('menu');
             const backBtn = document.getElementById('backBtn');
             
-            // Clear both containers
+            // Clear game
             gameFrame.srcdoc = '';
-            gameDirect.innerHTML = '';
             
             // Show menu, hide game
             gameContainer.classList.remove('active');
