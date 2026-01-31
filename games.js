@@ -1568,7 +1568,7 @@ window.GAMES = {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magia Dźwięku</title>
+    <title>Gitara Dźwięku</title>
     <style>
         * {
             margin: 0;
@@ -1577,7 +1577,7 @@ window.GAMES = {
         }
 
         body {
-            background: #0a0a0f;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1520 50%, #0a0a0f 100%);
             min-height: 100vh;
             overflow: hidden;
             font-family: system-ui, sans-serif;
@@ -1592,161 +1592,126 @@ window.GAMES = {
             justify-content: center;
         }
 
-        /* Ambient background that reacts */
-        .ambient {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% 50%, #0a0a0f 0%, #050508 100%);
-            transition: background 0.3s;
-        }
-
-        .ambient.active {
-            background: radial-gradient(circle at 50% 50%, #1a1a2f 0%, #0a0a0f 100%);
-        }
-
-        /* Center indicator - shows listening state */
-        .listener {
+        /* Guitar strings */
+        .strings-container {
             position: relative;
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #334, #112);
-            box-shadow: 0 0 30px rgba(100, 100, 150, 0.3);
+            width: 80%;
+            max-width: 800px;
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            padding: 40px 0;
+        }
+
+        .string-wrapper {
+            position: relative;
+            width: 100%;
+            height: 40px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            z-index: 10;
         }
 
-        .listener.listening {
-            animation: gentlePulse 2s ease-in-out infinite;
-        }
-
-        .listener.reacting {
-            transform: scale(1.5);
-            box-shadow: 0 0 80px rgba(255, 200, 100, 0.8);
-        }
-
-        @keyframes gentlePulse {
-            0%, 100% { 
-                transform: scale(1);
-                box-shadow: 0 0 30px rgba(100, 100, 150, 0.3);
-            }
-            50% { 
-                transform: scale(1.05);
-                box-shadow: 0 0 50px rgba(100, 100, 150, 0.5);
-            }
-        }
-
-        .listener-inner {
-            width: 60%;
-            height: 60%;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #556, #223);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .listener-core {
-            width: 50%;
-            height: 50%;
-            border-radius: 50%;
-            background: #99a;
-            transition: all 0.1s;
-        }
-
-        .listener.reacting .listener-core {
-            background: #ffdd66;
-            box-shadow: 0 0 30px #ffaa00;
-        }
-
-        /* Sound wave rings */
-        .sound-ring {
+        .string {
             position: absolute;
-            border-radius: 50%;
-            border: 3px solid;
-            animation: expandRing 1s ease-out forwards;
-            pointer-events: none;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--string-color), transparent);
+            box-shadow: 0 0 10px var(--string-color), 0 0 20px var(--string-color);
+            transform-origin: center;
+            transition: height 0.05s ease-out;
         }
 
-        @keyframes expandRing {
-            0% {
-                width: 150px;
-                height: 150px;
-                opacity: 1;
-            }
-            100% {
-                width: 600px;
-                height: 600px;
-                opacity: 0;
-            }
+        .string.vibrating {
+            animation: stringVibrate 0.1s ease-in-out;
         }
 
-        /* Firework particles */
-        .firework {
+        @keyframes stringVibrate {
+            0%, 100% { transform: translateY(0) scaleY(1); }
+            25% { transform: translateY(-8px) scaleY(1.5); }
+            75% { transform: translateY(8px) scaleY(1.5); }
+        }
+
+        /* String labels */
+        .string-label {
             position: absolute;
-            pointer-events: none;
+            left: -60px;
+            color: var(--string-color);
+            font-size: 14px;
+            font-weight: 600;
+            text-shadow: 0 0 10px var(--string-color);
+            opacity: 0.6;
         }
 
-        .particle {
+        .frequency-bar {
+            position: absolute;
+            right: -80px;
+            width: 60px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .frequency-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--string-color);
+            transition: width 0.1s ease-out;
+            box-shadow: 0 0 10px var(--string-color);
+        }
+
+        /* Wave particles that shoot out */
+        .wave-particle {
             position: absolute;
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            animation: particleExplode 1.5s ease-out forwards;
-        }
-
-        @keyframes particleExplode {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--tx), var(--ty)) scale(0);
-                opacity: 0;
-            }
-        }
-
-        /* Floating numbers that appear */
-        .float-number {
-            position: absolute;
-            font-size: 80px;
-            font-weight: 200;
-            color: white;
-            opacity: 0;
-            animation: floatUp 2s ease-out forwards;
             pointer-events: none;
-            text-shadow: 0 0 30px currentColor;
+            animation: waveShoot 1.5s ease-out forwards;
         }
 
-        @keyframes floatUp {
+        @keyframes waveShoot {
             0% {
-                opacity: 0;
-                transform: translateY(0) scale(0.5);
-            }
-            20% {
+                transform: translateX(0) scale(1);
                 opacity: 1;
-                transform: translateY(-20px) scale(1);
             }
             100% {
+                transform: translateX(var(--shoot-x)) translateY(var(--shoot-y)) scale(0.3);
                 opacity: 0;
-                transform: translateY(-150px) scale(0.8);
             }
         }
 
-        /* Start button overlay */
+        /* Ripple effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid;
+            pointer-events: none;
+            animation: rippleExpand 1s ease-out forwards;
+        }
+
+        @keyframes rippleExpand {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+            100% {
+                width: 200px;
+                height: 200px;
+                opacity: 0;
+            }
+        }
+
+        /* Start overlay */
         .start-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1761,35 +1726,60 @@ window.GAMES = {
         }
 
         .start-btn {
-            background: linear-gradient(135deg, #667, #445);
-            border: 2px solid #889;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
             color: white;
-            padding: 30px 60px;
+            padding: 25px 50px;
             border-radius: 50px;
             font-size: 24px;
             cursor: pointer;
             transition: all 0.3s;
-            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+            font-weight: 600;
         }
 
         .start-btn:hover {
-            background: linear-gradient(135deg, #778, #556);
             transform: scale(1.05);
-            box-shadow: 0 0 40px rgba(100, 100, 150, 0.5);
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.6);
         }
 
         .start-info {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.6);
             font-size: 16px;
+            margin-top: 20px;
             text-align: center;
             max-width: 400px;
             line-height: 1.6;
         }
 
-        /* Sensitivity control */
+        /* Counter */
+        .counter {
+            position: fixed;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 72px;
+            font-weight: 200;
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
+            z-index: 100;
+        }
+
+        /* Info text */
+        .info-text {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 18px;
+            text-align: center;
+        }
+
+        /* Controls */
         .controls {
             position: fixed;
-            bottom: 30px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -1817,57 +1807,42 @@ window.GAMES = {
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #99a;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             cursor: pointer;
-            transition: all 0.2s;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
         }
 
-        .sensitivity-slider::-webkit-slider-thumb:hover {
-            background: #bbf;
-            box-shadow: 0 0 15px rgba(150, 150, 255, 0.5);
-        }
-
-        .counter {
+        /* Note indicator */
+        .note-indicator {
             position: fixed;
-            top: 30px;
+            top: 140px;
             left: 50%;
             transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.3);
             font-size: 48px;
-            font-weight: 200;
-            z-index: 100;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.6);
+            text-shadow: 0 0 20px currentColor;
+            opacity: 0;
+            transition: opacity 0.2s;
         }
 
-        .info-text {
-            position: fixed;
-            top: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.2);
-            font-size: 14px;
-            z-index: 100;
+        .note-indicator.active {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
     <div class="start-overlay" id="startOverlay">
-        <button class="start-btn" id="startBtn">▶ Rozpocznij</button>
-        <p class="start-info">
-            Ekran będzie reagować na dźwięki z pokoju.<br>
-            Mów, klaskaj, wydawaj dźwięki — zobacz magię!
-        </p>
+        <button class="start-btn" id="startBtn">🎸 Rozpocznij</button>
+        <p class="start-info">Śpiewaj, gwiżdż, mów — zobacz jak struny reagują na twój głos!<br>Różne tony aktywują różne struny.</p>
     </div>
 
     <div class="container" id="container">
-        <div class="ambient" id="ambient"></div>
-        <div class="listener" id="listener">
-            <div class="listener-inner">
-                <div class="listener-core" id="core"></div>
-            </div>
-        </div>
+        <div class="strings-container" id="stringsContainer"></div>
     </div>
 
     <div class="counter" id="counter">0</div>
+    <div class="note-indicator" id="noteIndicator">🎵</div>
     <div class="info-text">Wydaj dźwięk!</div>
 
     <div class="controls">
@@ -1876,7 +1851,6 @@ window.GAMES = {
     </div>
 
     <script>
-        // Audio setup
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
         let analyser = null;
@@ -1884,94 +1858,277 @@ window.GAMES = {
         let isListening = false;
 
         const container = document.getElementById('container');
-        const listener = document.getElementById('listener');
-        const ambient = document.getElementById('ambient');
-        const core = document.getElementById('core');
+        const stringsContainer = document.getElementById('stringsContainer');
         const startOverlay = document.getElementById('startOverlay');
         const startBtn = document.getElementById('startBtn');
         const sensitivitySlider = document.getElementById('sensitivity');
         const counterEl = document.getElementById('counter');
+        const noteIndicator = document.getElementById('noteIndicator');
 
         let reactionCount = 0;
-        let lastReactionTime = 0;
         let sensitivity = 5;
 
-        // Beautiful colors for effects
-        const colors = [
-            '#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3', 
-            '#dda0dd', '#87ceeb', '#f8b500', '#ff8c94',
-            '#a8e6cf', '#ffd93d', '#ff9a9e', '#a1c4fd'
+        // Define 6 strings with their frequency ranges and colors
+        const strings = [
+            { name: 'Wysoki', color: '#ff6b9d', freqMin: 800, freqMax: 2000 },
+            { name: 'Średni+', color: '#c44569', freqMin: 500, freqMax: 800 },
+            { name: 'Średni', color: '#f39c12', freqMin: 300, freqMax: 500 },
+            { name: 'Średni-', color: '#feca57', freqMin: 200, freqMax: 300 },
+            { name: 'Niski', color: '#48dbfb', freqMin: 120, freqMax: 200 },
+            { name: 'Bas', color: '#5f27cd', freqMin: 50, freqMax: 120 },
         ];
 
-        // Piano notes
-        const pianoNotes = [
-            261.63, 293.66, 329.63, 349.23, 392.00, 
-            440.00, 493.88, 523.25, 587.33, 659.25
-        ];
+        const stringElements = [];
 
-        function playPianoChord() {
-            if (!audioCtx) return;
-
-            // Play 3 random harmonious notes
-            const baseIndex = Math.floor(Math.random() * 5);
-            const notes = [
-                pianoNotes[baseIndex],
-                pianoNotes[baseIndex + 2],
-                pianoNotes[baseIndex + 4]
-            ];
-
-            notes.forEach((freq, i) => {
-                setTimeout(() => {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-                    gain.gain.setValueAtTime(0, audioCtx.currentTime);
-                    gain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.05);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2);
-
-                    // Add harmonic
-                    const osc2 = audioCtx.createOscillator();
-                    const gain2 = audioCtx.createGain();
-                    osc2.type = 'sine';
-                    osc2.frequency.setValueAtTime(freq * 2, audioCtx.currentTime);
-                    gain2.gain.setValueAtTime(0.05, audioCtx.currentTime);
-
-                    osc.connect(gain);
-                    osc2.connect(gain2);
-                    gain2.connect(gain);
-                    gain.connect(audioCtx.destination);
-
-                    osc.start();
-                    osc2.start();
-                    osc.stop(audioCtx.currentTime + 2);
-                    osc2.stop(audioCtx.currentTime + 2);
-                }, i * 50);
+        // Create string elements
+        function createStrings() {
+            strings.forEach((string, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'string-wrapper';
+                
+                const label = document.createElement('div');
+                label.className = 'string-label';
+                label.textContent = string.name;
+                label.style.setProperty('--string-color', string.color);
+                
+                const stringEl = document.createElement('div');
+                stringEl.className = 'string';
+                stringEl.style.setProperty('--string-color', string.color);
+                
+                const freqBar = document.createElement('div');
+                freqBar.className = 'frequency-bar';
+                const freqFill = document.createElement('div');
+                freqFill.className = 'frequency-fill';
+                freqFill.style.setProperty('--string-color', string.color);
+                freqBar.appendChild(freqFill);
+                
+                wrapper.appendChild(label);
+                wrapper.appendChild(stringEl);
+                wrapper.appendChild(freqBar);
+                stringsContainer.appendChild(wrapper);
+                
+                stringElements.push({
+                    string: stringEl,
+                    fill: freqFill,
+                    wrapper: wrapper,
+                    config: string
+                });
             });
         }
 
-        function createSoundRing(color) {
-            const ring = document.createElement('div');
-            ring.className = 'sound-ring';
-            ring.style.borderColor = color;
-            ring.style.left = '50%';
-            ring.style.top = '50%';
-            ring.style.transform = 'translate(-50%, -50%)';
-            container.appendChild(ring);
-            setTimeout(() => ring.remove(), 1000);
+        function createWaveParticles(stringIndex) {
+            const wrapper = stringElements[stringIndex].wrapper;
+            const rect = wrapper.getBoundingClientRect();
+            const color = strings[stringIndex].color;
+            
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'wave-particle';
+                particle.style.background = color;
+                particle.style.boxShadow = \`0 0 15px \${color}\`;
+                particle.style.left = \`\${rect.left + rect.width / 2}px\`;
+                particle.style.top = \`\${rect.top + rect.height / 2}px\`;
+                
+                const angle = (Math.PI * 2 * i) / 8;
+                const distance = 100 + Math.random() * 100;
+                particle.style.setProperty('--shoot-x', \`\${Math.cos(angle) * distance}px\`);
+                particle.style.setProperty('--shoot-y', \`\${Math.sin(angle) * distance}px\`);
+                
+                container.appendChild(particle);
+                setTimeout(() => particle.remove(), 1500);
+            }
         }
 
-        function createFirework(x, y) {
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            const particleCount = 20;
+        function createRipple(stringIndex) {
+            const wrapper = stringElements[stringIndex].wrapper;
+            const rect = wrapper.getBoundingClientRect();
+            const color = strings[stringIndex].color;
+            
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple';
+            ripple.style.borderColor = color;
+            ripple.style.left = \`\${rect.left + rect.width / 2}px\`;
+            ripple.style.top = \`\${rect.top + rect.height / 2}px\`;
+            ripple.style.marginLeft = '-100px';
+            ripple.style.marginTop = '-100px';
+            
+            container.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 1000);
+        }
 
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.background = color;
-                particle.style.boxShadow = \`0 0 10px \${color}\`;
+        function playStringSound(stringIndex) {
+            if (!audioCtx) return;
+            
+            const config = strings[stringIndex];
+            const baseFreq = (config.freqMin + config.freqMax) / 2;
+            
+            // Create a guitar-like pluck sound
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(baseFreq, audioCtx.currentTime);
+            
+            // Sharp attack, quick decay (pluck envelope)
+            gain.gain.setValueAtTime(0, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+            
+            // Add harmonic for richness
+            const osc2 = audioCtx.createOscillator();
+            const gain2 = audioCtx.createGain();
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(baseFreq * 2, audioCtx.currentTime);
+            gain2.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+            
+            osc.connect(gain);
+            osc2.connect(gain2);
+            gain2.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.start();
+            osc2.start();
+            osc.stop(audioCtx.currentTime + 0.4);
+            osc2.stop(audioCtx.currentTime + 0.4);
+        }
+
+        function triggerString(stringIndex, intensity) {
+            const element = stringElements[stringIndex];
+            
+            // Visual feedback
+            element.string.classList.remove('vibrating');
+            void element.string.offsetWidth; // Force reflow
+            element.string.classList.add('vibrating');
+            
+            // Update frequency bar
+            element.fill.style.width = \`\${Math.min(intensity * 100, 100)}%\`;
+            
+            // Create effects
+            createWaveParticles(stringIndex);
+            createRipple(stringIndex);
+            
+            // Play sound
+            playStringSound(stringIndex);
+            
+            // Update counter
+            reactionCount++;
+            counterEl.textContent = reactionCount;
+            
+            // Show note indicator
+            noteIndicator.classList.add('active');
+            noteIndicator.style.color = strings[stringIndex].color;
+            setTimeout(() => {
+                noteIndicator.classList.remove('active');
+            }, 300);
+            
+            // Reset vibration class
+            setTimeout(() => {
+                element.string.classList.remove('vibrating');
+            }, 100);
+        }
+
+        async function startListening() {
+            try {
+                audioCtx = new AudioContext();
+                
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: { 
+                        echoCancellation: false,
+                        noiseSuppression: false,
+                        autoGainControl: false
+                    } 
+                });
+
+                microphone = audioCtx.createMediaStreamSource(stream);
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 2048;
+                analyser.smoothingTimeConstant = 0.3;
+
+                microphone.connect(analyser);
+
+                isListening = true;
+                startOverlay.classList.add('hidden');
+
+                detectSound();
+
+            } catch (err) {
+                console.error('Microphone error:', err);
+                alert('Nie można uzyskać dostępu do mikrofonu. Sprawdź uprawnienia.');
+            }
+        }
+
+        let lastTriggerTime = {};
+        strings.forEach((_, i) => lastTriggerTime[i] = 0);
+
+        function detectSound() {
+            if (!isListening) return;
+
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            analyser.getByteFrequencyData(dataArray);
+
+            // Calculate frequency resolution
+            const nyquist = audioCtx.sampleRate / 2;
+            const freqResolution = nyquist / bufferLength;
+
+            // Base threshold on sensitivity
+            const baseThreshold = 60 - (sensitivity * 5);
+            const now = Date.now();
+
+            // Check each string's frequency range
+            stringElements.forEach((element, index) => {
+                const config = element.config;
+                
+                // Find bins that correspond to this string's frequency range
+                const minBin = Math.floor(config.freqMin / freqResolution);
+                const maxBin = Math.ceil(config.freqMax / freqResolution);
+                
+                // Calculate average amplitude in this frequency range
+                let sum = 0;
+                let count = 0;
+                for (let i = minBin; i <= maxBin && i < bufferLength; i++) {
+                    sum += dataArray[i];
+                    count++;
+                }
+                const average = count > 0 ? sum / count : 0;
+                
+                // Update frequency bar continuously
+                const intensity = Math.min(average / 100, 1);
+                element.fill.style.width = \`\${intensity * 100}%\`;
+                
+                // Trigger string if threshold exceeded and enough time passed
+                if (average > baseThreshold && now - lastTriggerTime[index] > 300) {
+                    triggerString(index, intensity);
+                    lastTriggerTime[index] = now;
+                }
+            });
+
+            requestAnimationFrame(detectSound);
+        }
+
+        // Event listeners
+        startBtn.addEventListener('click', startListening);
+
+        sensitivitySlider.addEventListener('input', (e) => {
+            sensitivity = parseInt(e.target.value);
+        });
+
+        // Fullscreen
+        document.addEventListener('dblclick', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
+        // Initialize
+        createStrings();
+    </script>
+</body>
+</html>
+`0 0 10px \${color}\`;
                 particle.style.left = x + 'px';
                 particle.style.top = y + 'px';
 
