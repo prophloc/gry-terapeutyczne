@@ -1,0 +1,27 @@
+{
+  "name": "Gry Edukacyjne - Zwierzęta",
+  "short_name": "Zwierzęta",
+  "description": "Interaktywne gry edukacyjne dla dzieci ze zwierzątkami",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0a0520",
+  "theme_color": "#6b2ddf",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "games", "kids"],
+  "lang": "pl",
+  "dir": "ltr"
+}
